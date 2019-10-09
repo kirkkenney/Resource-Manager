@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang=en>
+    <head>
+        <meta charset="utf-8">
+        <title>Resources App</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <body>
+    <div class="main-content">
+            {{>header}}
+
+            <div id="contentBody">
+                {{!-- PAGE CONTENT GOES HERE --}}
+                <h2>Login</h2>
+                <h4> {{ message }} </h4>
+                <form action="/login" method="POST">
+                    <input type="text" name="email" placeholder="Your email">
+                    <input type="text" name="password" placeholder="Your password">
+                    <input type="Submit" value="Submit">
+                </form>
+
+            </div>
+
+        </div>
+
+        {{>footer}}
+    </body>
+</html>

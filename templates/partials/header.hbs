@@ -1,0 +1,19 @@
+<header>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            {{#if loggedIn}}
+                <form method="POST" id="logoutForm" action="/logout">
+                    <li><a onclick="document.getElementById('logoutForm').submit()">Logout</a></li>
+                </form>
+                {{!-- <li><a href="/logout">Logout</a></li> --}}
+            {{else}}
+                <li><a href="/login">Login</a></li>
+            {{/if}}
+            <li><a href="#">Saved Resources</a></li>
+            <li><a href="#">Submitted Resources</a></li>
+            <li><a href="/create-account">Create Account</a></li>
+            <li><a href="/create-resource">Add Resource</a></li>
+        </ul>
+    </nav>
+</header>

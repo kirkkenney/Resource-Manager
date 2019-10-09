@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang=en>
+    <head>
+        <meta charset="utf-8">
+        <title>Resources App</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <body>
+    <div class="main-content">
+            {{>header}}
+
+            <div id="contentBody">
+                {{!-- PAGE CONTENT GOES HERE --}}
+                <h2>Home</h2>
+                <div>
+                    {{#each resources}}
+                        <div>
+                            {{ this }}
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+
+        </div>
+
+        {{>footer}}
+    </body>
+</html>
