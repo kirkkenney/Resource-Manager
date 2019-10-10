@@ -10,32 +10,38 @@
     <div class="main-content">
             {{>header}}
 
-            <div id="contentBody">
+            <div class="contentBody">
                 {{!-- PAGE CONTENT GOES HERE --}}
                 <h2>Create Resource</h2>
                 <h4>{{ message }}</h4>
-                <form action="/create-resource" method="POST">
-                <input type="text" name="title" placeholder="Resource title">
-                <input type="text" name="description" placeholder="Resource description">
-                <input type="text" name="link" placeholder="Link to the resource">
+                <form action="/create-resource" method="POST" id="createResourceForm">
+                <div class="textControls">
+                    <input type="text" name="title" placeholder="Resource title">
+                    <input type="text" name="link" placeholder="Link to the resource"> 
+                </div>
+                <textarea name="description" placeholder="Resource description">
+                </textarea>
                 {{!-- <input type="text" name="resourceType" placeholder="Resource type"> --}}
-                <label for="resourceGroup">What language?</label>
-                <select name="resourceGroup" id="resourceGroup">
-                    <option value="c">C</option>
-                    <option value="css/design">CSS/Design</option>
-                    <option value="java">Java</option>
-                    <option value="javascript">Javascript</option>
-                    <option value="php">PHP</option>
-                    <option value="python">Python</option>
-                </select>
-                <label for="resourceType">What type of resource?</label>
-                <select name="resourceType" id="resourceType">
-                    <option value="article/blog">Article/Blog</option>
-                    <option value="audio/podcast">Audio/Podcast</option>
-                    <option value="book">Book</option>
-                    <option value="video">Video</option>
-                    <option value="website">Website</option>
-                </select>
+                <div class="selectControls">
+                    <label for="resourceGroup">What language?</label>
+                    <label for="resourceType">What type of resource?</label>
+                    <select name="resourceGroup" id="resourceGroup">
+                        <option value="c">C</option>
+                        <option value="css&design">CSS & Design</option>
+                        <option value="general&misc">General & Misc</option>
+                        <option value="java">Java</option>
+                        <option value="javascript">Javascript</option>
+                        <option value="php">PHP</option>
+                        <option value="python">Python</option>
+                    </select>
+                    <select name="resourceType" id="resourceType">
+                        <option value="article&blog">Article & Blog</option>
+                        <option value="audio&podcast">Audio & Podcast</option>
+                        <option value="book">Book</option>
+                        <option value="video">Video</option>
+                        <option value="website">Website</option>
+                    </select>                    
+                </div>
                 <input type="submit" value="Submit">
                 </form>
 

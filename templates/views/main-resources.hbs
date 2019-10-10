@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang=en>
+    <head>
+        <meta charset="utf-8">
+        <title>Resources App</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <body>
+    <div class="main-content">
+        
+            {{>header}}
+
+            <div class="contentBody">
+                {{!-- PAGE CONTENT GOES HERE --}}
+                <form class="resource-search" action="/resources/resourceGroup" method="POST">
+                    <input type="text" name="resourceGroup">
+                    <input type="submit" value="Submit">
+                </form>
+                {{#if resources}}
+                    <div class="all-resources">
+                        {{#each resources}}
+                            <div class="resource-card">
+                                <h4 class="resource-title"> {{ this.title }}</h4>
+                                <div class="resource-info">
+                                    <span> {{ this.resourceGroup}} </span>
+                                    <span> {{ this.resourceType }} </span>
+                                </div>
+                                <div class="resource-description"> {{ this.description }} </div>
+                                <a href="{{ this.link }}"> {{ this.title }} </a>
+                                {{#if ../isLoggedIn}}
+                                <button id="addToMyResources" onclick="sendSomeData('{{this._id}}', '/add-to-my-resources');">Add To My Resources</button>
+                                {{/if}}
+                            </div>
+                        {{/each}}
+                    </div>
+                {{else}}
+                <h3>No resources found for that group</h3>
+                {{/if}}
+            </div>
+
+
+        </div>
+
+        {{>footer}}
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js "integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+        <script src="/js/index.js"></script>
+    </body>
+</html>

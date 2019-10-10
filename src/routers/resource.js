@@ -52,13 +52,25 @@ router.get('/my-resources', auth, async (req, res) => {
     })
 })
 
+// below route is access via an AJAX post request on the front-end to add resources
+// to the user's savedResources (ie a resource created by another user)
+// this will return a success or error message depending on whether the requested resource
+// is already stored in their savedResources
 router.post('/add-to-my-resources', auth, async (req, res) => {
     try {
-        req.user.savedResources.forEach((resource) => {
-            if (resource._id == req.body.resourceId) {
-                return res.send('Resource already saved')
-            }
+        // first, the ".some" helper iterates over the user's savedResources
+        // and ".equals" evaluates whether the current iteration matches resource
+        // in the request body. It finishes by returning a boolean
+        const storedResource = req.user.savedResources.some(function(resource) {
+            return resource.equals(req.body.resourceId)
         })
+        // if the above returns true, a message is sent back to the AJAX call, informing
+        // user that this resource is already in their list
+        if (storedResource) {
+            return res.send('Resource already saved')
+        }
+        // if above return false, the requested resource ID is added to the user's
+        // savedResources array, and a success message sent back to the AJAX call
         req.user.savedResources.push(req.body.resourceId)
         await req.user.save()
         return res.send('Resource added to your list')

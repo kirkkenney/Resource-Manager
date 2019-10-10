@@ -45,6 +45,26 @@ router.post('/create-account', checkLoginStatus, async (req, res) => {
     }
 })
 
+router.post('/resources/:resourceGroup', checkLoginStatus, async (req, res) => {
+    const resourceGroup = req.body.resourceGroup
+    console.log(req.body.resourceGroup)
+    const resources = await Resource.find({ resourceGroup: resourceGroup })
+    console.log(resources)
+    res.render('main-resources', {
+        resources: resources
+    })
+})
+
+router.get('/resources/:resourceGroup', checkLoginStatus, async (req, res) => {
+    const resourceGroup = req.params.resourceGroup
+    console.log(req.params.resourceGroup)
+    const resources = await Resource.find({ resourceGroup: req.params.resourceGroup })
+    console.log(resources)
+    res.render('main-resources', {
+        resources: resources
+    })
+})
+
 
 
 

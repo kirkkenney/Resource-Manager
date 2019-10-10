@@ -8,11 +8,17 @@
     </head>
     <body>
     <div class="main-content">
+        
             {{>header}}
 
-            <div id="contentBody">
+            <div class="contentBody">
                 {{!-- PAGE CONTENT GOES HERE --}}
-                <h2>Home</h2>
+                
+                <form class="resource-search" action="/resources/resourceGroup" method="POST">
+                    <input type="text" name="resourceGroup">
+                    <input type="submit" value="Submit">
+                </form>
+
                 <div class="all-resources">
                     {{#each resources}}
                         <div class="resource-card">
@@ -24,7 +30,7 @@
                             <div class="resource-description"> {{ this.description }} </div>
                             <a href="{{ this.link }}"> {{ this.title }} </a>
                             {{#if ../isLoggedIn}}
-                            <button id="addToMyResources" onclick="sendSomeData('{{this._id}}');">Add To My Resources</button>
+                            <button id="addToMyResources" onclick="sendSomeData('{{this._id}}', '/add-to-my-resources');">Add To My Resources</button>
                             {{/if}}
                         </div>
                     {{/each}}
@@ -35,6 +41,7 @@
         </div>
 
         {{>footer}}
+
         <script src="https://code.jquery.com/jquery-3.3.1.min.js "integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
         <script src="/js/index.js"></script>
