@@ -1,6 +1,7 @@
 const express = require('express')
 const jwt = require('jsonwebtoken')
 
+const checkLoginStatus = require('../middleware/check-login-status.js')
 const Resource = require('../models/resources')
 const User = require('../models/users')
 
@@ -8,26 +9,27 @@ const User = require('../models/users')
 const router = new express.Router()
 
 
-router.get('/', async (req, res) => {
-    let loggedIn = false
-    const token = req.cookies['auth_token']
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    const user = await User.findOne({ _id: decoded._id, 'tokens.token': token })
-    if (user) {
-        loggedIn = true
-    }
+// checkLoginStatus is a middleware fnction that checks whether user is currently logged
+// in by checking their cookies against stored tokens. The page they are accessing will
+// render dynamically according to their login status
+router.get('/', checkLoginStatus, async (req, res) => {
+    // get all resources
     const resources = await Resource.find({})
+    // render HTML page, passing the resources for display
     res.render('index', {
-        loggedIn: loggedIn,
         resources: resources
     })
 })
 
-router.get('/create-account', (req, res) => {
+router.get('/create-account', checkLoginStatus, (req, res) => {
+    // if user is logged in, redirect them to the home page
+    if (res.locals.isLoggedIn) {
+        return res.redirect('/')
+    }
     res.render('create-account')
 })
 
-router.post('/create-account', async (req, res) => {
+router.post('/create-account', checkLoginStatus, async (req, res) => {
     const user = new User(req.body)
     try {
         await user.save()
@@ -38,7 +40,7 @@ router.post('/create-account', async (req, res) => {
     } catch (e) {
         console.log(e)
         res.render('create-account', {
-            message: `Oops that didn't work! ${req.body.username} or ${req.body.email} already exist ...`
+            message: `Oops that didn't work! Username or Email Address already exist ...`
         })
     }
 })

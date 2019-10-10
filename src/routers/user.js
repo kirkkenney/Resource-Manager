@@ -1,33 +1,43 @@
 const express = require('express')
 const User = require('../models/users')
 const auth = require('../middleware/auth')
-// const cookieParser = require('cookie-parser')
+const checkLoginStatus = require('../middleware/check-login-status.js')
 
 
 const router = new express.Router()
 
 
-router.get('/login', (req, res) => {
+router.get('/login', checkLoginStatus, (req, res) => {
+    // if user is already logged in, redirect them to homepage
+    if (res.locals.isLoggedIn) {
+        return res.redirect('/')
+    }
     res.render('login')
 })
 
-router.post('/login', async (req, res) => {
+router.post('/login', checkLoginStatus, async (req, res) => {
     try {
         //! "findByCredentials" method is a custom-build method in /models/user
         const user = await User.findByCredentials(req.body.email, req.body.password)
         //! generate auth token for specific user instance (as opposed to User object)
         const token = await user.generateAuthToken()
-        // res.setHeader('Authorization', `Bearer ${token}`)
-        // console.log(req.header('Authorization'))
+        // generate and set a client-side cookie with the generated token
         res.cookie('auth_token', token)
-        res.render('login', {
-            message: `Welcome back ${user.username}`,
-        })
+        return res.redirect('/')
     } catch (e) {
-        res.render('login', {
-            message: `An error occurred: ${e}`
+        res.render('index', {
+            message: `Unable to login. Please double-check the details you entered.`,
+            isLoggedIn: req.isLoggedIn
         })
     }
+})
+
+router.get('/logout', checkLoginStatus, (req, res) => {
+    // if user is not logged in, redirect them to home page
+    if (!res.locals.isLoggedIn) {
+        return res.redirect('/')
+    }
+    res.render('logout')
 })
 
 router.post('/logout', auth, async (req, res) => {
@@ -39,10 +49,24 @@ router.post('/logout', auth, async (req, res) => {
             // will therefore be removed from user.tokens array
             return token.token !== req.token
         })
+        // save user with modified tokens and redirect to home page
         await req.user.save()
-        res.redirect('/')
+        return res.redirect('/')
     } catch (e) {
         res.status(500).send()
+    }
+})
+
+router.post('/logout-all', auth, async (req, res) => {
+    try {
+        // if user wants to logout of ALL devices, then their tokens array stored
+        // in db should be emptied
+        req.user.tokens = []
+        // save modified user and redirect to home page
+        await req.user.save()
+        return res.redirect('/')    
+    } catch (e) {
+        res.status(500).send(e)
     }
 })
 

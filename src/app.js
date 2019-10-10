@@ -50,5 +50,5 @@ app.use(mainRouter)
 
 
 app.listen(port, () => {
-    console.log(`Server is up on ${port}`)
+    console.log(`Server is up on ${port} \n`)
 })

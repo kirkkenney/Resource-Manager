@@ -16,14 +16,24 @@
                 <div>
                     {{#each resources}}
                         <div>
-                            {{ this }}
+                            <h5> {{ this.title }} - {{ this.resourceGroup }} </h5>
+                            <p> {{ this.description }} </p>
+                            <a href="{{ this.link }}"> {{ this.title }} </a>
+                            <p> {{ this.resourceType }} </p>
                         </div>
+                        {{#if ../isLoggedIn }}
+                        <button id="addToMyResources" onclick="sendSomeData('{{this._id}}');">Add To My Resources</button>
+                        {{/if}}
                     {{/each}}
                 </div>
             </div>
 
+
         </div>
 
         {{>footer}}
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js "integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+        <script src="/js/index.js"></script>
     </body>
 </html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang=en>
+    <head>
+        <meta charset="utf-8">
+        <title>Resources App</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <body>
+    <div class="main-content">
+            {{>header}}
+
+            <div id="contentBody">
+                {{!-- PAGE CONTENT GOES HERE --}}
+                <h2>Logout</h2>
+                <form action="/logout" method="POST">
+                    <input type="submit" value="Logout Of This Device">
+                </form>
+                <form action="/logout-all" method="POST">
+                    <input type="submit" value="Logout Of All Devices">
+                </form>
+            </div>
+
+        </div>
+
+        {{>footer}}
+    </body>
+</html>
