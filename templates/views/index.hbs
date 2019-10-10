@@ -13,17 +13,20 @@
             <div id="contentBody">
                 {{!-- PAGE CONTENT GOES HERE --}}
                 <h2>Home</h2>
-                <div>
+                <div class="all-resources">
                     {{#each resources}}
-                        <div>
-                            <h5> {{ this.title }} - {{ this.resourceGroup }} </h5>
-                            <p> {{ this.description }} </p>
+                        <div class="resource-card">
+                            <h4 class="resource-title"> {{ this.title }}</h4>
+                            <div class="resource-info">
+                                <span> {{ this.resourceGroup}} </span>
+                                <span> {{ this.resourceType }} </span>
+                            </div>
+                            <div class="resource-description"> {{ this.description }} </div>
                             <a href="{{ this.link }}"> {{ this.title }} </a>
-                            <p> {{ this.resourceType }} </p>
+                            {{#if ../isLoggedIn}}
+                            <button id="addToMyResources" onclick="sendSomeData('{{this._id}}');">Add To My Resources</button>
+                            {{/if}}
                         </div>
-                        {{#if ../isLoggedIn }}
-                        <button id="addToMyResources" onclick="sendSomeData('{{this._id}}');">Add To My Resources</button>
-                        {{/if}}
                     {{/each}}
                 </div>
             </div>

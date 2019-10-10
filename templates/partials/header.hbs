@@ -1,12 +1,14 @@
 <header>
+    {{#if isLoggedIn}}
+        <div>Logged in as {{ username }}</div>
+    {{/if}}
     <nav>
-        <ul>
+        <ul class="nav-list">
             <li><a href="/">Home</a></li>
             {{#if isLoggedIn }}
             <li><a href="/logout">Logout</a></li>
                 <li><a href="/create-resource">Add Resource</a></li>
                 <li><a href="/my-resources">My Resources</a></li>
-                <span>Logged in as {{ username }}</span>
             {{ else }}
                 <li><a href="/login">Login</a></li>
                 <li><a href="/create-account">Create Account</a></li>
