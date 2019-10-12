@@ -13,27 +13,77 @@
 
             <div class="contentBody">
                 {{!-- PAGE CONTENT GOES HERE --}}
-                
-                <form class="resource-search" action="/resources/resourceGroup" method="POST">
-                    <input type="text" name="resourceGroup">
-                    <input type="submit" value="Submit">
-                </form>
-
-                <div class="all-resources">
-                    {{#each resources}}
-                        <div class="resource-card">
-                            <h4 class="resource-title"> {{ this.title }}</h4>
-                            <div class="resource-info">
-                                <span> {{ this.resourceGroup}} </span>
-                                <span> {{ this.resourceType }} </span>
+                <div class="newest-resources">
+                    <div class="all-resources">
+                        {{#each mostRecent}}
+                            <div class="resource-card">
+                                <div class="resource-card-top">
+                                    <div class="favourite">
+                                        &#9734;
+                                    </div>
+                                    <div class="votes">
+                                        <span> &#8679; </span>
+                                        <span> 5 </span>
+                                    </div>
+                                    <div class="resource-type">
+                                        &#9786;
+                                    </div>
+                                </div>
+                                <div class="resource-card-body">
+                                    <div class="resource-group">
+                                        {{ this.resourceGroup }}
+                                    </div>
+                                    <div class="title">
+                                        {{ this.title }}
+                                    </div>
+                                    <div class="desc">
+                                        {{ this.description }}
+                                    </div>
+                                </div>
+                                <div class="resource-card-bottom">
+                                    <div class="details">
+                                        <div class="owner">
+                                            Submitted by: {{ this.owner.username }}
+                                        </div>
+                                        <div class="submitted-date">
+                                            {{ this.createdAt }}
+                                        </div>                                        
+                                    </div>
+                                    <div class="link">
+                                        <a href="{{ this.link }}" target="_blank">Visit {{ this.title }}</a>
+                                    </div>
+                                </div>
+                                {{!-- <h4 class="resource-title"> {{ this.title }}</h4>
+                                <div class="resource-info">
+                                    <span> {{ this.resourceGroup}} </span>
+                                    <span> {{ this.resourceType }} </span>
+                                </div>
+                                <div class="resource-description"> {{ this.description }} </div>
+                                <a href="{{ this.link }}"> {{ this.title }} </a>
+                                {{#if ../isLoggedIn}}
+                                <button id="addToMyResources" onclick="sendSomeData('{{this._id}}', '/add-to-my-resources');">Add To My Resources</button>
+                                {{/if}} --}}
                             </div>
-                            <div class="resource-description"> {{ this.description }} </div>
-                            <a href="{{ this.link }}"> {{ this.title }} </a>
-                            {{#if ../isLoggedIn}}
-                            <button id="addToMyResources" onclick="sendSomeData('{{this._id}}', '/add-to-my-resources');">Add To My Resources</button>
-                            {{/if}}
-                        </div>
-                    {{/each}}
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="popular-resources">
+                    <div class="all-resources">
+                        {{#each resources}}
+                            <div class="resource-card">
+                                <h4 class="resource-title"> {{ this.title }}</h4>
+                                <div class="resource-info">
+                                    <span> {{ this.resourceGroup}} </span>
+                                    <span> {{ this.resourceType }} </span>
+                                </div>
+                                <div class="resource-description"> {{ this.description }} </div>
+                                <a href="{{ this.link }}"> {{ this.title }} </a>
+                                {{#if ../isLoggedIn}}
+                                <button id="addToMyResources" onclick="sendSomeData('{{this._id}}', '/add-to-my-resources');">Add To My Resources</button>
+                                {{/if}}
+                            </div>
+                        {{/each}}
+                    </div>                    
                 </div>
             </div>
 
@@ -42,8 +92,5 @@
 
         {{>footer}}
 
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js "integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-
-        <script src="/js/index.js"></script>
     </body>
 </html>

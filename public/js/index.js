@@ -1,4 +1,21 @@
-// AJAX CALL FOR ADDING A RESOURCE TO USER'S SAVEDRESOURCES ARRAY
+// MODIFY CSS CLASS OF CURRENT PAGE
+$(document).ready(function() {
+    $("nav [href]").each(function() {
+        if (window.location.href == this.href) {
+            $(this.parentNode).addClass('current-page')
+        } else {
+            console.log(`${this.href} is not active`)
+        }
+    })
+})
+
+$('#resourceSearch').submit(function(event) {
+    event.preventDefault()
+    const value = $('#resourceGroup').val()
+    window.location.href = `${window.location.href}resources/${value}`
+})
+
+// AJAX CALL TO POST DATA TO SERVER
 function sendSomeData(data, url) {
     const newData = data.toString()
     $.ajax({
@@ -20,13 +37,3 @@ function sendSomeData(data, url) {
         console.log(data)
     })
 }
-
-// function resourceRedirect() {
-//     const actionUrl = $('#resourceInput').val()
-//     const actionForm = $('#resourceForm').val()
-//     const baseUrl = window.location.href
-//     const redirectUrl = `${baseUrl}resources/${actionUrl}`
-//     alert(redirectUrl)
-//     actionForm.method = "POST"
-//     actionForm.action = redirectUrl
-// }

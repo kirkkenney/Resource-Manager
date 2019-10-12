@@ -21,8 +21,12 @@ const resourceSchema = new mongoose.Schema({
         trim: true
     },
     votes: {
-        type: Number
+        type: Number,
+        default: 0
     },
+    voters: [{
+        type: String
+    }],
     resourceType: {
         type: String,
         required: true,

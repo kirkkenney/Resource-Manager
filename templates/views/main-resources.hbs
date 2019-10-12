@@ -13,10 +13,6 @@
 
             <div class="contentBody">
                 {{!-- PAGE CONTENT GOES HERE --}}
-                <form class="resource-search" action="/resources/resourceGroup" method="POST">
-                    <input type="text" name="resourceGroup">
-                    <input type="submit" value="Submit">
-                </form>
                 {{#if resources}}
                     <div class="all-resources">
                         {{#each resources}}

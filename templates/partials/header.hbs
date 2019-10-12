@@ -1,11 +1,12 @@
 <header>
+    <div id="icon">
+        <a href="/">
+        <img src="/images/icon.png" alt="">
+        </a>
+    </div>
     <div id="header">
-        {{#if isLoggedIn}}
-            <div id="userInfo">Logged in as {{ username }}</div>
-        {{/if}}
         <nav>
             <ul class="nav-list">
-                <li><a href="/">Home</a></li>
                 {{#if isLoggedIn }}
                 <li><a href="/logout">Logout</a></li>
                     <li><a href="/create-resource">Add Resource</a></li>
@@ -16,10 +17,15 @@
                 {{/if}}
             </ul>
         </nav>
-        {{#if message}}
-            <div id="customMessage">
-                {{ message }}
+    </div>
+    <div id="subHeader">
+        {{#if isLoggedIn}}
+            <div class="user-info">
+                Logged in as {{ username }}
             </div>
         {{/if}}
+        <form id="resourceSearch" class="resource-search">
+            <input type="text" id="resourceGroup" name="resourceGroup" placeholder="Find resources ...">
+        </form>
     </div>
 </header>

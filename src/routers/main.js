@@ -13,10 +13,33 @@ const router = new express.Router()
 // in by checking their cookies against stored tokens. The page they are accessing will
 // render dynamically according to their login status
 router.get('/', checkLoginStatus, async (req, res) => {
-    // get all resources
-    const resources = await Resource.find({})
+    // get all resources - .lean() method converts the returned query from mongoose
+    // data object to raw object data
+    let resources = await Resource.find({}).populate('owner').lean()
+    if (res.locals.isLoggedIn) {
+        // iterate over each resource object in the array
+        resources.forEach((resource) => {
+            // foundResource returns a boolean evaluation of whether the resource._id is 
+            // found in user savedResources._id keys. "toString()" method must be used
+            // because of the way that MongoDB handles the data
+            let foundResource = req.user.savedResources.some(e => e._id.toString() === resource._id.toString())
+            // assign the booleans evaluation to a new "savedResourceCheck" key
+            // in resources objects array
+            resource.savedResourceCheck = foundResource
+        })
+    }
+    // create a copy of resources 
+    const mostRecentResources = resources.slice(0)
+    // sort the copy by "createdAt" so that newest appear first
+    mostRecentResources.sort(function(a, b) {
+        return b.createdAt - a.createdAt
+    }).forEach((resource) => {
+        // loop over each resource reformate the date to be more human readable
+        resource.createdAt = resource.createdAt.toDateString()
+    })
     // render HTML page, passing the resources for display
     res.render('index', {
+        mostRecent: mostRecentResources,
         resources: resources
     })
 })
@@ -45,20 +68,11 @@ router.post('/create-account', checkLoginStatus, async (req, res) => {
     }
 })
 
-router.post('/resources/:resourceGroup', checkLoginStatus, async (req, res) => {
-    const resourceGroup = req.body.resourceGroup
-    console.log(req.body.resourceGroup)
-    const resources = await Resource.find({ resourceGroup: resourceGroup })
-    console.log(resources)
-    res.render('main-resources', {
-        resources: resources
-    })
-})
 
 router.get('/resources/:resourceGroup', checkLoginStatus, async (req, res) => {
     const resourceGroup = req.params.resourceGroup
-    console.log(req.params.resourceGroup)
-    const resources = await Resource.find({ resourceGroup: req.params.resourceGroup })
+    console.log(resourceGroup)
+    const resources = await Resource.find({ resourceGroup: resourceGroup })
     console.log(resources)
     res.render('main-resources', {
         resources: resources
