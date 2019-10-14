@@ -171,6 +171,7 @@ header nav ul li a {
     text-align: center;
     background-color: rgb(111, 111, 255);
     color: rgb(0,0,0);
+    z-index: 105;
 }
 
 h1 {
@@ -202,15 +203,17 @@ h1 {
     padding: 1%;
     margin: 2% 0;
     overflow: auto;
+    color: rgb(62, 91, 202);
 }
 
 .resource-card .resource-card-top {
-    background-color: rgb(180, 180, 180);
     height: 30px;
+    line-height: 30px;
     width: 100%;
     display: flex;
     justify-content: space-around;
     font-size: 1.2em;
+    color: rgb(62, 91, 202);
 }
 
 .resource-card .resource-card-top .favourite {
@@ -218,10 +221,33 @@ h1 {
     height: 100%;
 }
 
+.resource-card .resource-card-top .favourite i:hover {
+    color: rgb(212, 212, 0);
+    cursor: pointer;
+}
+
+.resource-card .resource-card-top .saved-resource {
+    color: rgb(212, 212, 0);
+}
+
 .resource-card .resource-card-top .votes {
     width: 70%;
     height: 100%;
 }
+
+.resource-card .resource-card-top .votes i:hover {
+    color: rgb(0, 192, 0);
+    cursor: pointer;
+}
+
+.resource-card .resource-card-top .voted-resource {
+    color: rgb(0, 192, 0);
+}
+
+.resource-card .resource-card-top .votes i, span {
+    margin: 0 1%;
+}
+
 
 .resource-card .resource-card-top .resource-type {
     width: 15%;
@@ -231,28 +257,31 @@ h1 {
 .resource-card .resource-card-body {
     height: auto;
     margin: 1% 0;
+    max-width: 100%;
+    overflow-wrap: break-word;
 }
 
 .resource-card .resource-card-body .resource-group {
     text-transform: capitalize;
     font-weight: bold;
     font-size: 1.2em;
+    margin: 2% 0;
 }
 
 .resource-card .resource-card-body .title {
     text-transform: capitalize;
     font-weight: bold;
     font-size: 1.4em;
-    margin: 1% 0;
 }
 
-.resource-card .resource-card-body .description {
+.resource-card .resource-card-body .desc {
     font-size: .9em;
-    margin: 1% 0;
+    margin: 2% 5%;
+    word-wrap: break-word;
+    width: 90%;
 }
 
 .resource-card .resource-card-bottom {
-    background-color: rgb(180, 180, 180);
     height: auto;
     width: 100%;
     display: flex;

@@ -5,6 +5,7 @@
         <title>Resources App</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/css/styles.css">
+        <script src="https://kit.fontawesome.com/cb9907bc66.js" crossorigin="anonymous"></script>
     </head>
     <body>
     <div class="main-content">
@@ -12,21 +13,26 @@
             {{>header}}
 
             <div class="contentBody">
+
+                <button onclick="sortByVotes()">SORT BY VOTES</button>
+                <button onclick="sortByDate()">SORT BY DATE</button>
+
                 {{!-- PAGE CONTENT GOES HERE --}}
                 <div class="newest-resources">
                     <div class="all-resources">
                         {{#each mostRecent}}
                             <div class="resource-card">
                                 <div class="resource-card-top">
-                                    <div class="favourite">
-                                        &#9734;
+                                    <div class="favourite {{ this.savedClass }}">
+                                        <i class="fas fa-star" onclick="addToFavourites(event, '{{this._id}}');"></i>
                                     </div>
-                                    <div class="votes">
-                                        <span> &#8679; </span>
-                                        <span> 5 </span>
+                                    <div class="votes {{ this.votedClass }}">
+                                        {{!-- FONT AWESOME ARROW --}}
+                                        <i class="fas fa-arrow-circle-up" onclick="addVote(event, '{{this._id}}');"></i>
+                                        <span> {{ this.votes }} </span>
                                     </div>
                                     <div class="resource-type">
-                                        &#9786;
+                                        <i class="{{ this.resourceTypeIcon }}"></i>
                                     </div>
                                 </div>
                                 <div class="resource-card-body">
@@ -53,34 +59,51 @@
                                         <a href="{{ this.link }}" target="_blank">Visit {{ this.title }}</a>
                                     </div>
                                 </div>
-                                {{!-- <h4 class="resource-title"> {{ this.title }}</h4>
-                                <div class="resource-info">
-                                    <span> {{ this.resourceGroup}} </span>
-                                    <span> {{ this.resourceType }} </span>
-                                </div>
-                                <div class="resource-description"> {{ this.description }} </div>
-                                <a href="{{ this.link }}"> {{ this.title }} </a>
-                                {{#if ../isLoggedIn}}
-                                <button id="addToMyResources" onclick="sendSomeData('{{this._id}}', '/add-to-my-resources');">Add To My Resources</button>
-                                {{/if}} --}}
                             </div>
                         {{/each}}
                     </div>
                 </div>
                 <div class="popular-resources">
                     <div class="all-resources">
-                        {{#each resources}}
+                        {{#each mostPopular}}
                             <div class="resource-card">
-                                <h4 class="resource-title"> {{ this.title }}</h4>
-                                <div class="resource-info">
-                                    <span> {{ this.resourceGroup}} </span>
-                                    <span> {{ this.resourceType }} </span>
+                                <div class="resource-card-top">
+                                    <div class="favourite {{ this.savedClass }}">
+                                        <i class="fas fa-star" onclick="addToFavourites(event, '{{this._id}}');"></i>
+                                    </div>
+                                    <div class="votes {{ this.votedClass }}">
+                                        {{!-- FONT AWESOME ARROW --}}
+                                        <i class="fas fa-arrow-circle-up" onclick="addVote(event, '{{this._id}}');"></i>
+                                        <span> {{ this.votes }} </span>
+                                    </div>
+                                    <div class="resource-type">
+                                        <i class="{{ this.resourceTypeIcon }}"></i>
+                                    </div>
                                 </div>
-                                <div class="resource-description"> {{ this.description }} </div>
-                                <a href="{{ this.link }}"> {{ this.title }} </a>
-                                {{#if ../isLoggedIn}}
-                                <button id="addToMyResources" onclick="sendSomeData('{{this._id}}', '/add-to-my-resources');">Add To My Resources</button>
-                                {{/if}}
+                                <div class="resource-card-body">
+                                    <div class="resource-group">
+                                        {{ this.resourceGroup }}
+                                    </div>
+                                    <div class="title">
+                                        {{ this.title }}
+                                    </div>
+                                    <div class="desc">
+                                        {{ this.description }}
+                                    </div>
+                                </div>
+                                <div class="resource-card-bottom">
+                                    <div class="details">
+                                        <div class="owner">
+                                            Submitted by: {{ this.owner.username }}
+                                        </div>
+                                        <div class="submitted-date">
+                                            {{ this.createdAt }}
+                                        </div>                                        
+                                    </div>
+                                    <div class="link">
+                                        <a href="{{ this.link }}" target="_blank">Visit {{ this.title }}</a>
+                                    </div>
+                                </div>
                             </div>
                         {{/each}}
                     </div>                    

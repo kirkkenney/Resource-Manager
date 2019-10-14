@@ -25,7 +25,9 @@ const resourceSchema = new mongoose.Schema({
         default: 0
     },
     voters: [{
-        type: String
+        vote: {
+            type: String
+        }
     }],
     resourceType: {
         type: String,
@@ -42,10 +44,30 @@ const resourceSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    resourceTypeIcon: {
+        type: String
+    },
 }, {
     // mongoose schema automatically inserts "created" and "updated" timestamps into model
     timestamps: true
+})
+
+resourceSchema.pre('save', async function (next) {
+    const resource = this
+    const icons = {
+        "article&blog": "fas fa-newspaper",
+        "audio&podcast": "fas fa-volume-up",
+        "book": "fas fa-book-open",
+        "video": "fas fa-video",
+        "website": "fas fa-globe"
+    }
+    if (icons.hasOwnProperty(resource.resourceType)) {
+        resource.resourceTypeIcon = icons[resource.resourceType]
+        console.log(resource)
+    } else {
+        console.log(`${resource.resourceType} not found in icons object`, icons)
+    }
 })
 
 const Resources = mongoose.model('Resources', resourceSchema)

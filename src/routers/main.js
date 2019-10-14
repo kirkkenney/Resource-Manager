@@ -22,10 +22,24 @@ router.get('/', checkLoginStatus, async (req, res) => {
             // foundResource returns a boolean evaluation of whether the resource._id is 
             // found in user savedResources._id keys. "toString()" method must be used
             // because of the way that MongoDB handles the data
-            let foundResource = req.user.savedResources.some(e => e._id.toString() === resource._id.toString())
+            const savedResource = req.user.savedResources.some(e => e._id.toString() === resource._id.toString())
+            // users that have upvoted a resource have their id stored in the resource's
+            // "voters" db field. Below function checks whether current user's id is 
+            //stored in that field
+            const alreadyVoted = resource.voters.some(e => e._id.toString() === req.user._id.toString())
             // assign the booleans evaluation to a new "savedResourceCheck" key
             // in resources objects array
-            resource.savedResourceCheck = foundResource
+            resource.savedResourceCheck = savedResource
+            // if the user has saved this resource, add below key/value pair, which
+            // is used in HTML/CSS to dynamically alter the content accordingly
+            if (savedResource) {
+                resource.savedClass = "saved-resource"
+            }
+            // if the user has upvoted this resource, add below key/value pair, which
+            // is used in HTML/CSS to dynamically alter the content accordingly
+            if (alreadyVoted) {
+                resource.votedClass = "voted-resource"
+            }
         })
     }
     // create a copy of resources 
@@ -37,10 +51,14 @@ router.get('/', checkLoginStatus, async (req, res) => {
         // loop over each resource reformate the date to be more human readable
         resource.createdAt = resource.createdAt.toDateString()
     })
+    const mostPopularResources = resources.slice(0)
+    mostPopularResources.sort(function(a, b) {
+        return b.votes - a.votes
+    })
     // render HTML page, passing the resources for display
     res.render('index', {
         mostRecent: mostRecentResources,
-        resources: resources
+        mostPopular: mostPopularResources
     })
 })
 
