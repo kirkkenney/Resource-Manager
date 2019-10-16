@@ -72,7 +72,8 @@ userSchema.virtual('resources', {
     localField: '_id',
     // foreignField is the name on the OTHER thing that is going to create this relationship ie on Task model
     foreignField: 'owner'
-    // the relationship therefore is the _id field on the User, and the owner field on Task
+    // the relationship therefore is the _id field on the User, and the owner field on 
+    //Resource
     // both of these should be equal, and mongoose will evaluate this for the purposes of 
     // determining the relationship
 })
@@ -128,13 +129,6 @@ userSchema.pre('save', async function (next) {
         user.password = await bcrypt.hash(user.password, 8)
     }
     //! next is always called at the end of the function
-    next()
-})
-
-// Delete tasks associated with user when user is removed
-userSchema.pre('remove', async function (next) {
-    const user = this
-    await Task.deleteMany({ owner: user._id })
     next()
 })
 

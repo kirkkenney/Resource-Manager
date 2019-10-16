@@ -42,23 +42,13 @@ router.get('/', checkLoginStatus, async (req, res) => {
             }
         })
     }
-    // create a copy of resources 
-    const mostRecentResources = resources.slice(0)
-    // sort the copy by "createdAt" so that newest appear first
-    mostRecentResources.sort(function(a, b) {
-        return b.createdAt - a.createdAt
-    }).forEach((resource) => {
-        // loop over each resource reformate the date to be more human readable
+    resources.forEach((resource) => {
+        // iterate over resources, and assign a more readable createdAt date
         resource.createdAt = resource.createdAt.toDateString()
-    })
-    const mostPopularResources = resources.slice(0)
-    mostPopularResources.sort(function(a, b) {
-        return b.votes - a.votes
     })
     // render HTML page, passing the resources for display
     res.render('index', {
-        mostRecent: mostRecentResources,
-        mostPopular: mostPopularResources
+        resources: resources
     })
 })
 

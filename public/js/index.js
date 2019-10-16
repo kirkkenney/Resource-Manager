@@ -80,7 +80,7 @@ function sortByVotes() {
         b = parseInt($(".votes span", b).text())
         return b - a;
         // modify HTML to reflect sorted resourced cards
-      }).appendTo(".newest-resources");
+      }).appendTo(".all-resources");
 }
 
 function sortByDate() {
@@ -91,5 +91,5 @@ function sortByDate() {
         b = new Date($(".submitted-date", b).text())
         return b - a
         // modify HTML to reflect sorted resourced cards
-    }).appendTo(".newest-resources")
+    }).appendTo(".all-resources")
 }

@@ -10,21 +10,21 @@
     </head>
     <body>
     <div class="main-content">
-            {{>header}}
+        {{>header}}
 
-            <div class="contentBody">
-                {{!-- PAGE CONTENT GOES HERE --}}
-                <h2>Logout</h2>
-                <form action="/logout" method="POST">
-                    <input type="submit" value="Logout Of This Device">
-                </form>
-                <form action="/logout-all" method="POST">
-                    <input type="submit" value="Logout Of All Devices">
-                </form>
-            </div>
+        <div class="contentBody">
+            {{!-- PAGE CONTENT GOES HERE --}}
+        <h5>
+            Created resources: {{ user.createdResources }}
+        </h5>
+        <h5>
+            Saved resources: {{ user.savedResources }}
+        </h5>
 
         </div>
 
+
+    </div>
         {{>footer}}
     </body>
 </html>

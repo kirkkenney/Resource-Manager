@@ -1,5 +1,6 @@
 const express = require('express')
 const User = require('../models/users')
+const Resource = require('../models/resources')
 const auth = require('../middleware/auth')
 const checkLoginStatus = require('../middleware/check-login-status.js')
 
@@ -67,6 +68,22 @@ router.post('/logout-all', auth, async (req, res) => {
         return res.redirect('/')    
     } catch (e) {
         res.status(500).send(e)
+    }
+})
+
+router.get('/users/:username', checkLoginStatus, async (req, res) => {
+    const user = await User.findOne({ username: req.params.username }).lean()
+    user.savedResources = user.savedResources.length
+    const createdResources = await Resource.countDocuments({ owner: user._id })
+    user.createdResources = createdResources
+    if (user.username === req.user.username) {
+        res.render('my-profile', {
+            user: user
+        })
+    } else {
+        res.render('user-profile', {
+            user: user
+        })
     }
 })
 

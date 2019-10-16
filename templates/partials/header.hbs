@@ -4,28 +4,26 @@
         <img src="/images/icon.png" alt="">
         </a>
     </div>
-    <div id="header">
-        <nav>
-            <ul class="nav-list">
-                {{#if isLoggedIn }}
-                <li><a href="/logout">Logout</a></li>
-                    <li><a href="/create-resource">Add Resource</a></li>
-                    <li><a href="/my-resources">My Resources</a></li>
-                {{ else }}
-                    <li><a href="/login">Login</a></li>
-                    <li><a href="/create-account">Create Account</a></li>
-                {{/if}}
-            </ul>
-        </nav>
-    </div>
-    <div id="subHeader">
-        {{#if isLoggedIn}}
-            <div class="user-info">
-                Logged in as {{ username }}
-            </div>
-        {{/if}}
-        <form id="resourceSearch" class="resource-search">
-            <input type="text" id="resourceGroup" name="resourceGroup" placeholder="Find resources ...">
-        </form>
+
+    <div class="user-info">
+        <div class="user-info-circle">
+            <i class="fas fa-user-circle"></i>
+            <span>{{ username }}</span>               
+        </div>
+        <div class="user-info-menu">
+            <nav>
+                <ul>
+                    {{#if isLoggedIn}}
+                        <li><a href="/logout">Logout</a></li>
+                        <li><a href="/users/{{ username }}">My Profile</a></li>
+                        <li><a href="/my-resources">My Resources</a></li>
+                        <li><a href="/create-resource">Add Resource</a></li>
+                    {{else}}
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/create-account">Create Account</a></li>
+                    {{/if}}
+                </ul>
+            </nav>
+        </div>
     </div>
 </header>
