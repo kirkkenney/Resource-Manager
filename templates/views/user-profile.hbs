@@ -14,12 +14,58 @@
 
         <div class="contentBody">
             {{!-- PAGE CONTENT GOES HERE --}}
-        <h5>
-            Created resources: {{ user.createdResources }}
-        </h5>
-        <h5>
-            Saved resources: {{ user.savedResources }}
-        </h5>
+            <h5>
+                Created resources: {{ user.createdResources }}
+            </h5>
+            <h5>
+                Saved resources: {{ user.savedResources }}
+            </h5>
+            <h5>
+                Created resource votes: {{ user.createdResourceVotes }}
+            </h5>
+
+            <div class="user-resources">
+                {{#each resources}}
+                    <div class="resource-card">
+                        <div class="resource-card-top">
+                            <div class="favourite {{ this.savedClass }}">
+                                <i class="fas fa-star" onclick="addToFavourites(event, '{{this._id}}');"></i>
+                            </div>
+                            <div class="votes {{ this.votedClass }}">
+                                <i class="fas fa-arrow-circle-up" onclick="addVote(event, '{{this._id}}');"></i>
+                                <span> {{ this.votes }} </span>
+                            </div>
+                            <div class="resource-type">
+                                <i class="{{ this.resourceTypeIcon }}"></i>
+                            </div>
+                        </div>
+                        <div class="resource-card-body">
+                            <div class="resource-group">
+                                {{ this.resourceGroup }}
+                            </div>
+                            <div class="title">
+                                {{ this.title }}
+                            </div>
+                            <div class="desc">
+                                {{ this.description }}
+                            </div>
+                        </div>
+                        <div class="resource-card-bottom">
+                            <div class="details">
+                                <div class="owner">
+                                    Submitted by: <a href="/users/{{this.owner.username}}"> {{ this.owner.username }} </a>
+                                </div>
+                                <div class="submitted-date">
+                                    {{ this.createdAt }}
+                                </div>                                        
+                            </div>
+                            <div class="link">
+                                <a href="{{ this.link }}" target="_blank">Visit {{ this.title }}</a>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}            
+            </div>
 
         </div>
 

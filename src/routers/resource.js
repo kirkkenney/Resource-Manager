@@ -80,21 +80,31 @@ router.post('/add-to-my-resources', auth, async (req, res) => {
 })
 
 router.post('/add-vote', auth, async (req, res) => {
+    // find the resource for id passed to route
     const resource = await Resource.findById(req.body.resourceId)
-    console.log(resource.voters)
+    // check if the "voters" stored in the resource document match the user
+    // making the request
     const alreadyVoted = resource.voters.some(function(user) {
         return user.equals(req.user.id)
     })
-    console.log(alreadyVoted)
     if (alreadyVoted) {
+        // if the user has already voted, reutrn the function
         return res.send({ "message": "You've already voted" })
     } else {
+        // if the user has not already voted, increase vote count by 1 and add the user's
+        // details to resource "voters" array
         resource.votes += 1
         resource.voters.push(req.user.id)
         await resource.save()
         return res.send({ "message": "Thanks for voting!",
         "resource": resource })
     }
+})
+
+router.get('/resource/:id', async (req, res) => {
+    const resource = await Resource.findOneAndDelete({ _id: req.params.id })
+    await resource.remove()
+    return res.redirect('/')
 })
 
 

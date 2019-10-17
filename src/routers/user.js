@@ -72,17 +72,31 @@ router.post('/logout-all', auth, async (req, res) => {
 })
 
 router.get('/users/:username', checkLoginStatus, async (req, res) => {
+    // get the user's details from request parameters
     const user = await User.findOne({ username: req.params.username }).lean()
+    // get all resources that have been created by the queried user
+    const createdResources = await Resource.find({ owner: user._id })
+    // count number of votes given to the queried user's created resources
+    // start at 0 by default
+    let createdResourceVotes = 0
+    createdResources.forEach((resource) => {
+        createdResourceVotes += resource.votes
+    })
+    // created new properties on the user object, and assign values returned from previous
+    // calculations: number of resources user has created; how many votes those resources 
+    // have received; how mnay resources the user has saved to their own collection
+    user.createdResources = createdResources.length
+    user.createdResourceVotes = createdResourceVotes
     user.savedResources = user.savedResources.length
-    const createdResources = await Resource.countDocuments({ owner: user._id })
-    user.createdResources = createdResources
+    // if the user being queried is the user passing the query, render appropriate page
     if (user.username === req.user.username) {
         res.render('my-profile', {
             user: user
         })
     } else {
         res.render('user-profile', {
-            user: user
+            user: user,
+            resources: createdResources
         })
     }
 })

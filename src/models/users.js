@@ -51,9 +51,8 @@ const userSchema = new mongoose.Schema({
         }
     }],
     savedResources: [{
-        resource: {
-            type: String
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Resources'
     }],
     avatar: {
         // store avatar image as binary data
