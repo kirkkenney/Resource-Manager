@@ -125,11 +125,12 @@ router.get('/users/:username', checkLoginStatus, async (req, res) => {
     // get the user's details from request parameters
     const user = await User.findOne({ username: req.params.username }).lean()
     // get all resources that have been created by the queried user
-    const createdResources = await Resource.find({ owner: user._id })
+    const createdResources = await Resource.find({ owner: user._id }).lean()
     // count number of votes given to the queried user's created resources
     // start at 0 by default
     let createdResourceVotes = 0
     createdResources.forEach((resource) => {
+        resource.createdAt = resource.createdAt.toDateString()
         createdResourceVotes += resource.votes
     })
     // created new properties on the user object, and assign values returned from previous
@@ -148,6 +149,15 @@ router.get('/users/:username', checkLoginStatus, async (req, res) => {
             user: user,
             resources: createdResources
         })
+    }
+})
+
+router.post('/check-username', async (req, res) => {
+    const user = await User.findOne({ username: req.body.username })
+    if (user) {
+        return res.send({ 'message': 'Username already taken!' })
+    } else {
+        return res.send({ 'message': '' })
     }
 })
 

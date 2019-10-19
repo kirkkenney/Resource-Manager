@@ -14,20 +14,26 @@
 
             <div class="contentBody">
                 {{!-- PAGE CONTENT GOES HERE --}}
-                <h2>Create Account</h2>
-                <h4>{{ message }}</h4>
-                <form action="/create-account" method="POST">
-                    <input type="text" name="name" placeholder="Your name">
-                    <input type="text" name="username" placeholder="Choose a username">
-                    <input type="email" name="email" placeholder="Your email address">
-                    <input type="text" name="password" placeholder="Choose a password">
-                    <input type="Submit" value="Submit">
-                </form>
+                <div class="create-account-form">
+                    <h2>Create Account</h2>
+                    <h4>{{ message }}</h4>
+                    <form action="/create-account" method="POST" id="createAccountForm">
+                        <input type="text" name="name" class="your-name "placeholder="Your name" required>
+                        <input type="text" name="username" class="your-username "placeholder="Choose a username" required>
+                        <input type="email" name="email" class="your-email "placeholder="Your email address" required>
+                        <input type="password" name="password" class="your-password "placeholder="Choose a password" required>
+                        <input type="submit" value="Submit">
+                    </form>
+                    <div class="validation-messages"></div>
+                </div>
 
             </div>
 
         </div>
 
         {{>footer}}
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js "integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="/js/create-account.js"></script>
     </body>
 </html>

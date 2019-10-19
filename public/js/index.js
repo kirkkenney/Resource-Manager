@@ -1,18 +1,3 @@
-// MODIFY CSS CLASS OF CURRENT PAGE
-$(document).ready(function() {
-    $("nav [href]").each(function() {
-        if (window.location.href == this.href) {
-            $(this.parentNode).addClass('current-page')
-        }
-    })
-})
-
-$('#resourceSearch').submit(function(event) {
-    event.preventDefault()
-    const value = $('#resourceGroup').val()
-    window.location.href = `${window.location.href}resources/${value}`
-})
-
 // AJAX CALL TO ADD RESOURCE TO USER FAVOURITES
 function addToFavourites(event, data) {
     const newData = data.toString()
@@ -71,7 +56,18 @@ function addVote(event, data) {
     )
 }
 
+// SORT RESOURCES BY MOST POPULAR
 function sortByVotes() {
+    // this file and functionality is accessible from home page
+    // and user profile pages. The resources container are wrapped
+    // in different divs on both pages, so below if/else checks
+    // which page (and therefore resoure container) is being used
+    let resourcesDiv
+    if ($('.all-resources').length) {
+        resourcesDiv = '.all-resources'
+    } else if ($('.user-resources').length) {
+        resourcesDiv = '.user-resources'
+    }
     // get the resource cards and initiate sort function
     $(".resource-card").sort(function(a, b) {
         // get the number of votes as an int
@@ -80,10 +76,21 @@ function sortByVotes() {
         b = parseInt($(".votes span", b).text())
         return b - a;
         // modify HTML to reflect sorted resourced cards
-      }).appendTo(".all-resources");
+      }).appendTo(resourcesDiv)
 }
 
+// SORT RESOURCES BY NEWEST
 function sortByDate() {
+    // this file and functionality is accessible from home page
+    // and user profile pages. The resources container are wrapped
+    // in different divs on both pages, so below if/else checks
+    // which page (and therefore resoure container) is being used
+    let resourcesDiv
+    if ($('.all-resources').length) {
+        resourcesDiv = '.all-resources'
+    } else if ($('.user-resources').length) {
+        resourcesDiv = '.user-resources'
+    }
     // get the resource cards and initiate sort function
     $(".resource-card").sort(function(a, b) {
         // convert the date string to a Javascript Date object
@@ -91,5 +98,5 @@ function sortByDate() {
         b = new Date($(".submitted-date", b).text())
         return b - a
         // modify HTML to reflect sorted resourced cards
-    }).appendTo(".all-resources")
+    }).appendTo(resourcesDiv)
 }

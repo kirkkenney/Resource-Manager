@@ -15,7 +15,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        unique: true
+        unique: true,
+        minlength: 3,
+        maxlength: 15
     },
     email: {
         type: String,
@@ -35,12 +37,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 7,
-        trim: true,
-        validate(value) {
-            if (value.includes('password')) {
-                throw new Error('Password cannot contain word: password')
-            }
-        }
+        trim: true
     },
     auth: {
         token: {
@@ -104,17 +101,22 @@ userSchema.methods.generateAuthToken = async function () {
 
 userSchema.methods.generateVerificationToken = async function () {
     const user = this
-    // generate a unique, randomised auth token
-    const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET)
-    // assign token to the user's auth.token property
-    user.auth.token = token
-    // set the auth token to expire in 2 hours
-    user.auth.expires = new Date() + 7_200_000
-    console.log(user.auth.expires)
-    console.log(user.auth.token)
-    // return token to the calling function
-    await user.save()
-    return token
+    try {
+        // generate a unique, randomised auth token
+        const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET)
+        // assign token to the user's auth.token property
+        user.auth.token = token
+        // set the auth token to expire in 2 hours
+        const expires = Date.now() + 7_200_000
+        user.auth.expires = new Date(expires)
+        console.log(user.auth.expires)
+        console.log(user.auth.token)
+        // return token to the calling function
+        await user.save()
+        return token       
+    } catch (e) {
+        console.log(e)
+    }
 }
 
 userSchema.methods.toJSON = function () {

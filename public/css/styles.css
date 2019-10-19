@@ -6,6 +6,12 @@ Light Shades - rgb(238, 233, 230)
 Dark Shades - rgb(26, 22, 33)
 */
 
+input, textarea {
+    border: none;
+    font-size: 1.2rem;
+    padding: 1%;
+}
+
 body {
     color: rgb(26, 22, 33);
     background-image: url('/images/dust_scratches.png');
@@ -110,19 +116,6 @@ header .user-info:hover .user-info-menu {
     width: 150px;
 }
 
-/* header .user-info .user-info-menu:hover {
-    height: auto;
-    display: block;
-    font-size: 1.1rem;
-    background-color: rgb(74, 20, 140);
-    position: absolute;
-    right: -50px;
-    top: 60px;
-    color: rgb(238, 233, 230);
-    text-align: center;
-    width: 150px;   
-} */
-
 header .user-info .user-info-menu nav {
     width: 100%;
     text-align: center;
@@ -181,13 +174,13 @@ button:hover {
     cursor: pointer;
 }
 
-#resourceControls {
+.resource-controls {
     width: 100%;
     text-align: center;
     margin: 2.5% 0;
 }
 
-#resourceControls button {
+.resource-controls button {
     background-color: rgb(74, 20, 140);
     color: rgb(238, 233, 230);
     font-size: 1rem;
