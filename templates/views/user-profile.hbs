@@ -14,15 +14,19 @@
 
         <div class="contentBody">
             {{!-- PAGE CONTENT GOES HERE --}}
-            <h5>
-                Created resources: {{ user.createdResources }}
-            </h5>
-            <h5>
-                Saved resources: {{ user.savedResources }}
-            </h5>
-            <h5>
-                Created resource votes: {{ user.createdResourceVotes }}
-            </h5>
+            <div class="user-resources-info">
+                <div class="user-resources-info-stats">
+                    <div>{{ user.createdResources }}</div>
+                    <div>{{ user.savedResources }}</div>
+                    <div>{{ user.createdResourceVotes }}</div>
+                </div>
+                <div class="user-resources-info-text">
+                    <div>Created Resources</div>
+                    <div>Saved Resources</div>
+                    <div> Votes Received</div>
+                </div>                
+            </div>
+
 
             <div class="user-resources">
                 {{#each resources}}
@@ -52,10 +56,8 @@
                         </div>
                         <div class="resource-card-bottom">
                             <div class="details">
-                                <div class="owner">
-                                    Submitted by: <a href="/users/{{this.owner.username}}"> {{ this.owner.username }} </a>
-                                </div>
                                 <div class="submitted-date">
+                                   Submitted: <br>
                                     {{ this.createdAt }}
                                 </div>                                        
                             </div>

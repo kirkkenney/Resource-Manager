@@ -1,8 +1,11 @@
 const express = require('express')
+const nodemailer = require('nodemailer')
+
 const User = require('../models/users')
 const Resource = require('../models/resources')
 const auth = require('../middleware/auth')
 const checkLoginStatus = require('../middleware/check-login-status.js')
+const welcomeEmail = require('../emails/welcome-email.js')
 
 
 const router = new express.Router()
@@ -20,17 +23,64 @@ router.post('/login', checkLoginStatus, async (req, res) => {
     try {
         //! "findByCredentials" method is a custom-build method in /models/user
         const user = await User.findByCredentials(req.body.email, req.body.password)
-        //! generate auth token for specific user instance (as opposed to User object)
-        const token = await user.generateAuthToken()
-        // generate and set a client-side cookie with the generated token
-        res.cookie('auth_token', token)
-        return res.redirect('/')
+        if (!user.auth.isVerified) {
+            res.render('login', {
+                message: 'Unable to login. Please verify your account with the email that was sent to you when you created your account.'
+            })
+        } else {
+            //! generate auth token for specific user instance (as opposed to User object)
+            const token = await user.generateAuthToken()
+            // generate and set a client-side cookie with the generated token
+            res.cookie('auth_token', token)
+            return res.redirect('/')            
+        }
     } catch (e) {
-        res.render('index', {
+        res.render('login', {
             message: `Unable to login. Please double-check the details you entered.`,
             isLoggedIn: req.isLoggedIn
         })
     }
+})
+
+router.get('/verify/:verificationToken', async (req, res) => {
+    // find the user with the verificationToken that is passed into the url query 
+    // previously sent to user via email
+    const user = await User.findOne({ 'auth.token': req.params.verificationToken })
+    let message
+    if (!user) {
+        // if user cannot be found with the verificationToken
+        message = "Unable to verify your credentials. Please check your emails for your verification link."
+    // if the time on their verificationToken is less than the current time
+    } else if (user.auth.expires < Date.now()) {
+        return res.render('expired-token', {
+            // inform user that their verificationToken has expired. Link provided in page
+            // to resend
+            message: `Your verification link expired at ${user.auth.expires.toString()}`,
+            id: user._id
+        })
+    } else {
+        // if user record found, and their verificationToken has not expired, set the 
+        // auth.token property to an empty string, and verify their account
+        user.auth.token = ''
+        user.auth.isVerified = true 
+        user.save()
+        message = "Verification successful. You can now login."
+    }
+    res.render('login', {
+        message: message
+    })
+})
+
+router.post('/resend-verification/:id', async (req, res) => {
+    // find user with their id passed as url query
+    const user = await User.findOne({ _id: req.params.id })
+    // generate a new verificationToken
+    const token = await user.generateVerificationToken()
+    // send user a new email with their verificationToken
+    welcomeEmail(user.email, token)
+    res.render('login', {
+        message: `A new verification link has been sent to ${user.email}`
+    })
 })
 
 router.get('/logout', checkLoginStatus, (req, res) => {

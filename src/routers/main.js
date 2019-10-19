@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const checkLoginStatus = require('../middleware/check-login-status.js')
 const Resource = require('../models/resources')
 const User = require('../models/users')
+const welcomeEmail = require('../emails/welcome-email.js')
 
 
 const router = new express.Router()
@@ -64,7 +65,11 @@ router.post('/create-account', checkLoginStatus, async (req, res) => {
     const user = new User(req.body)
     try {
         await user.save()
-        const token = await user.generateAuthToken()
+        // generate a verification token for the user. This is sent to them via email
+        // as a verification link. Without verifying this, the user cannot login
+        const token = await user.generateVerificationToken()
+        // call the welcomeEmail function
+        welcomeEmail(req.body.email, token)
         res.render('create-account', {
             message: `Thanks for signing up ${req.body.username}! An email has been sent to ${req.body.email} ...`
         })

@@ -42,6 +42,19 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
+    auth: {
+        token: {
+            type: String
+        },
+        isVerified: {
+            type: Boolean,
+            required: true,
+            default: false
+        },
+        expires: {
+            type: Date
+        }
+    },
     //! store auth tokens against user db record. Allows user to logout, login on other
     //! devices, stay logged in etc
     tokens: [{
@@ -86,7 +99,21 @@ userSchema.methods.generateAuthToken = async function () {
     //! add generated token to the user's stored tokens
     user.tokens = user.tokens.concat({ token: token })
     await user.save()
-    // res.setHeader('Authorization', 'Bearer '+ token)
+    return token
+}
+
+userSchema.methods.generateVerificationToken = async function () {
+    const user = this
+    // generate a unique, randomised auth token
+    const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET)
+    // assign token to the user's auth.token property
+    user.auth.token = token
+    // set the auth token to expire in 2 hours
+    user.auth.expires = new Date() + 7_200_000
+    console.log(user.auth.expires)
+    console.log(user.auth.token)
+    // return token to the calling function
+    await user.save()
     return token
 }
 
