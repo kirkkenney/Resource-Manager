@@ -14,13 +14,15 @@
 
             <div class="contentBody">
                 {{!-- PAGE CONTENT GOES HERE --}}
-                <h2>Login</h2>
-                <h4> {{ message }} </h4>
-                <form action="/login" method="POST">
-                    <input type="text" name="email" placeholder="Your email">
-                    <input type="text" name="password" placeholder="Your password">
-                    <input type="Submit" value="Submit">
-                </form>
+                <div class="login-form">
+                    <h2>Login</h2>
+                    <h4> {{ message }} </h4>
+                    <form action="/login" method="POST">
+                        <input type="text" name="email" placeholder="Your email">
+                        <input type="password" name="password" placeholder="Your password">
+                        <input type="Submit" value="Submit">
+                    </form>                    
+                </div>
 
             </div>
 

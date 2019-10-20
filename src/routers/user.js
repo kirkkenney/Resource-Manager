@@ -157,7 +157,7 @@ router.post('/check-username', async (req, res) => {
     if (user) {
         return res.send({ 'message': 'Username already taken!' })
     } else {
-        return res.send({ 'message': '' })
+        return res.send({ 'message': 'Username available!' })
     }
 })
 

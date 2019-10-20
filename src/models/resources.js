@@ -9,12 +9,16 @@ const resourceSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        minlength: 5,
+        maxlength: 60
     },
     description: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        minlength: 10,
+        maxlength: 250
     },
     link: {
         type: String,

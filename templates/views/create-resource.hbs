@@ -14,43 +14,47 @@
 
             <div class="contentBody">
                 {{!-- PAGE CONTENT GOES HERE --}}
-                <h2>Create Resource</h2>
-                <h4>{{ message }}</h4>
-                <form action="/create-resource" method="POST" id="createResourceForm">
-                <div class="textControls">
-                    <input type="text" name="title" placeholder="Resource title">
-                    <input type="text" name="link" placeholder="Link to the resource"> 
+                <div class="create-resource-form">
+                    <h2>Create Resource</h2>
+                    <h4>{{ message }}</h4>
+                    <div class="validation-messages"></div>
+                    <form action="/create-resource" method="POST" id="createResourceForm">
+                    <div class="textControls">
+                        <input type="text" name="title" class="resource-title" placeholder="Resource title (5-40 characters)" required>
+                        <input type="text" name="link" placeholder="Link to the resource" required> 
+                    </div>
+                    <textarea name="description" class="resource-description" placeholder="Resource description (10-250 characters)" required></textarea>
+                    {{!-- <input type="text" name="resourceType" placeholder="Resource type"> --}}
+                    <div class="selectControls">
+                        <select name="resourceGroup" id="resourceGroup" required>
+                            <option value="" disabled selected hidden>Resource language group</option>
+                            <option value="c">C</option>
+                            <option value="css & design">CSS & Design</option>
+                            <option value="general & misc">General & Misc</option>
+                            <option value="java">Java</option>
+                            <option value="javascript">Javascript</option>
+                            <option value="php">PHP</option>
+                            <option value="python">Python</option>
+                        </select>
+                        <select name="resourceType" id="resourceType" required>
+                            <option value="" disabled selected hidden>Type of resource</option>
+                            <option value="article&blog">Article & Blog</option>
+                            <option value="audio&podcast">Audio & Podcast</option>
+                            <option value="book">Book</option>
+                            <option value="video">Video</option>
+                            <option value="website">Website</option>
+                        </select>                    
+                    </div>
+                    <input type="submit" value="Submit">
+                    </form>                    
                 </div>
-                <textarea name="description" placeholder="Resource description">
-                </textarea>
-                {{!-- <input type="text" name="resourceType" placeholder="Resource type"> --}}
-                <div class="selectControls">
-                    <label for="resourceGroup">What language?</label>
-                    <label for="resourceType">What type of resource?</label>
-                    <select name="resourceGroup" id="resourceGroup">
-                        <option value="c">C</option>
-                        <option value="css & design">CSS & Design</option>
-                        <option value="general & misc">General & Misc</option>
-                        <option value="java">Java</option>
-                        <option value="javascript">Javascript</option>
-                        <option value="php">PHP</option>
-                        <option value="python">Python</option>
-                    </select>
-                    <select name="resourceType" id="resourceType">
-                        <option value="article&blog">Article & Blog</option>
-                        <option value="audio&podcast">Audio & Podcast</option>
-                        <option value="book">Book</option>
-                        <option value="video">Video</option>
-                        <option value="website">Website</option>
-                    </select>                    
-                </div>
-                <input type="submit" value="Submit">
-                </form>
 
             </div>
 
         </div>
 
         {{>footer}}
+
+        <script src="/js/create-resource.js"></script>
     </body>
 </html>

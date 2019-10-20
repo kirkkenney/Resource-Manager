@@ -17,14 +17,18 @@
                 <div class="create-account-form">
                     <h2>Create Account</h2>
                     <h4>{{ message }}</h4>
+                    <div class="validation-messages"></div>
                     <form action="/create-account" method="POST" id="createAccountForm">
-                        <input type="text" name="name" class="your-name "placeholder="Your name" required>
-                        <input type="text" name="username" class="your-username "placeholder="Choose a username" required>
-                        <input type="email" name="email" class="your-email "placeholder="Your email address" required>
-                        <input type="password" name="password" class="your-password "placeholder="Choose a password" required>
+                        <div class="input-row">
+                            <input type="text" name="name" class="your-name "placeholder="Your name" required>
+                            <input type="text" name="username" class="your-username "placeholder="Choose a username (3-15 characters)" required>   
+                        </div>
+                        <div class="input-row">
+                            <input type="email" name="email" class="your-email "placeholder="Your email address" required>
+                            <input type="password" name="password" class="your-password "placeholder="Choose a password (7+ characters)" required>   
+                        </div>
                         <input type="submit" value="Submit">
                     </form>
-                    <div class="validation-messages"></div>
                 </div>
 
             </div>

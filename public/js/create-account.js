@@ -4,33 +4,46 @@ const validationMessages = document.getElementsByClassName('validation-messages'
 const passwordInput = document.getElementsByClassName('your-password')[0]
 const usernameInput = document.getElementsByClassName('your-username')[0]
 
+passwordInput.addEventListener('keyup', checkPasswordInput)
+passwordInput.addEventListener('blur', checkPasswordInput)
+usernameInput.addEventListener('keyup', checkUsernameInput)
+usernameInput.addEventListener('blur', checkUsernameFree)
+
 const validations = {
     username: false,
     password: false
 }
 
-passwordInput.addEventListener('keyup', function() {
-    validationMessages.textContent = ""
-    if (passwordInput.value.length < 7) {
-        validationMessages.textContent = "Password must be longer than 7 characters"
+function checkPasswordInput() {
+    validationMessages.style.display = "none"
+    const inputLength = passwordInput.value.length
+    if (inputLength < 7) {
+        validationMessages.style.display = "block"
+        validationMessages.textContent = `Password must be longer than 7 characters. ${7-inputLength} more characters required`
         validations.password = false
     } else {
         validations.password = true
-    }
-})
+    }    
+}
 
-usernameInput.addEventListener('keyup', function() {
-    validationMessages.textContent = ''
-    if (usernameInput.value.length > 15 || usernameInput.value < 3) {
-        validationMessages.textContent = 'Username must be a minimum of 3, and maximum of 15 characters'
+function checkUsernameInput() {
+    validationMessages.style.display = "none"
+    const inputLength = usernameInput.value.length
+    if (inputLength > 15) {
+        validationMessages.style.display = "block"
+        validationMessages.textContent = `Username must be less than 15 characters. ${inputLength-15} characters too many`
+        validations.username = false
+    } else if (inputLength < 3) {
+        validationMessages.style.display = "block"
+        validationMessages.textContent = `Username must be at least 3 characters. At least ${3-inputLength} more characters needed`
         validations.username = false
     } else {
         validations.username = true
     }
-})
+}
 
-usernameInput.addEventListener('blur', function() {
-    validationMessages.textContent = ''
+function checkUsernameFree() {
+    validationMessages.style.display = "none"
     const data = usernameInput.value
     $.ajax({
         url: '/check-username',
@@ -40,10 +53,11 @@ usernameInput.addEventListener('blur', function() {
     }).done(function(serverData) {
         // back-end sends JSON back - parse it first
         returnedData = JSON.parse(serverData)
+        validationMessages.style.display = "block"
         validationMessages.textContent = returnedData.message
         }
-    )
-})
+    )    
+}
 
 form.addEventListener('submit', function(event) {
     event.preventDefault()
@@ -51,6 +65,7 @@ form.addEventListener('submit', function(event) {
     if (isValidated) {
         form.submit()
     } else {
+        validationMessages.style.display = "block"
         validationMessages.textContent = "Some of the details you provided do not meet requirements. Please double-check them and try again."
     }
 })
