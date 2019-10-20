@@ -9,6 +9,8 @@ const welcomeEmail = require('../emails/welcome-email.js')
 
 const router = new express.Router()
 
+const resourceOptions = ['c', 'c#', 'c++', 'clojure', 'cobol', 'css & design', 'databases', 'general', 'haskell', 'java', 'javascript', 'kotlin', 'pascal', 'php', 'python']
+
 
 // checkLoginStatus is a middleware fnction that checks whether user is currently logged
 // in by checking their cookies against stored tokens. The page they are accessing will
@@ -49,7 +51,8 @@ router.get('/', checkLoginStatus, async (req, res) => {
     })
     // render HTML page, passing the resources for display
     res.render('index', {
-        resources: resources
+        resources: resources,
+        resourceOptions: resourceOptions
     })
 })
 

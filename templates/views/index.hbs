@@ -24,7 +24,10 @@
 
                 <div id="resourcesMainContent">
                     <div class="resource-links">
-                        <div>Javascript</div>
+                        {{#each resourceOptions}}
+                            <div><a href="/resources/{{ this }}">{{ this }}</a></div>
+                        {{/each}}
+                        {{!-- <div>Javascript</div>
                         <div>PHP</div>
                         <div>C</div>
                         <div>Python</div>
@@ -33,7 +36,7 @@
                         <div>C++</div>
                         <div>C#</div>
                         <div>Databases</div>
-                        <div>General</div>
+                        <div>General</div> --}}
                     </div>
 
 

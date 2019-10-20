@@ -10,12 +10,13 @@ function addToFavourites(event, data) {
         data: {resourceId: newData},
         // when the AJAX call has finished, execute below
     }).done(function(data) {
+        data = JSON.parse(data)
         if (!$(event.target).parent().hasClass('saved-resource')) {
             $(event.target).parent().addClass('saved-resource')           
         }
         // get response from the server and append a div containing the response
         // informing the user of the succes/failure of their request
-        $('body').append(`<div id='ajaxMessage'>${data}</div>`)
+        $('body').append(`<div id='ajaxMessage'>${data.message}</div>`)
         // setTimeout to destroy the div after 2 seconds
         setTimeout(function() {
             $('#ajaxMessage').remove()

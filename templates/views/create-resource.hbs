@@ -28,13 +28,16 @@
                     <div class="selectControls">
                         <select name="resourceGroup" id="resourceGroup" required>
                             <option value="" disabled selected hidden>Resource language group</option>
-                            <option value="c">C</option>
+                            {{#each resourceOptions}}
+                            <option value="{{ this }}">{{ this }}</option>
+                            {{/each}}
+                            {{!-- <option value="c">C</option>
                             <option value="css & design">CSS & Design</option>
                             <option value="general & misc">General & Misc</option>
                             <option value="java">Java</option>
                             <option value="javascript">Javascript</option>
                             <option value="php">PHP</option>
-                            <option value="python">Python</option>
+                            <option value="python">Python</option> --}}
                         </select>
                         <select name="resourceType" id="resourceType" required>
                             <option value="" disabled selected hidden>Type of resource</option>

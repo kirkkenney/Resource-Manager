@@ -126,6 +126,7 @@ router.get('/users/:username', checkLoginStatus, async (req, res) => {
     const user = await User.findOne({ username: req.params.username }).lean()
     // get all resources that have been created by the queried user
     const createdResources = await Resource.find({ owner: user._id }).lean()
+    const savedResources = await Resource.find({ _id: { $in: req.user.savedResources } }).lean()
     // count number of votes given to the queried user's created resources
     // start at 0 by default
     let createdResourceVotes = 0
@@ -133,18 +134,25 @@ router.get('/users/:username', checkLoginStatus, async (req, res) => {
         resource.createdAt = resource.createdAt.toDateString()
         createdResourceVotes += resource.votes
     })
-    // created new properties on the user object, and assign values returned from previous
-    // calculations: number of resources user has created; how many votes those resources 
-    // have received; how mnay resources the user has saved to their own collection
-    user.createdResources = createdResources.length
-    user.createdResourceVotes = createdResourceVotes
-    user.savedResources = user.savedResources.length
+    savedResources.forEach((resource) => {
+        resource.createdAt = resource.createdAt.toDateString()
+    })
+    if (req.user) {
     // if the user being queried is the user passing the query, render appropriate page
-    if (user.username === req.user.username) {
-        res.render('my-profile', {
-            user: user
-        })
+        if (user.username === req.user.username) {
+            user.createdResourcesStat = createdResources.length
+            user.createdResourceVotes = createdResourceVotes
+            user.savedResourcesStat = user.savedResources.length
+            res.render('my-profile', {
+                user: user,
+                createdResources: createdResources,
+                savedResources: savedResources
+            })
+        }        
     } else {
+        user.createdResources = createdResources.length
+        user.createdResourceVotes = createdResourceVotes
+        user.savedResources = user.savedResources.length
         res.render('user-profile', {
             user: user,
             resources: createdResources

@@ -67,7 +67,7 @@ body {
     background-image: url('/images/dust_scratches.png');
     max-width: 100%;
     margin: 0 auto;
-    padding: 0 16px;
+    /* padding: 0 16px; */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -77,12 +77,17 @@ body {
 
 .main-content {
     flex-grow: 1;
+    /* background-color: rgba(121, 158, 209, .1); */
+    /* background-image: linear-gradient(to top right, rgba(255, 255, 255, .1), rgba(121, 158, 209, .1)); */
+    background-image: linear-gradient(to top right, rgba(121, 158, 209, .1), rgba(74, 20, 140, .1));
+    width: 100%;
+    height: 100%;
 }
 
 footer {
     color: rgb(23, 23, 32);
     border-top: 1px solid rgb(74, 20, 140);
-    margin-top: 16px;
+    /* margin-top: 16px; */
     padding: 16px 0;
 }
 
@@ -163,7 +168,7 @@ header .user-info:hover .user-info-menu {
     top: 60px;
     color: rgb(238, 233, 230);
     text-align: center;
-    width: 150px;
+    width: 200px;
 }
 
 header .user-info .user-info-menu nav {
@@ -264,11 +269,16 @@ button:hover {
     margin: 5% 10%;
     width: 80%;
     background-color: rgb(74, 20, 140);
-    color: rgb(238, 233, 230);
     padding: 1.5% 0;
     border-radius: 4px;
-    font-size: 1rem;
+}
+
+.resource-links div a {
+    color: rgb(238, 233, 230);
     font-weight: bold;
+    text-transform: capitalize;
+    font-size: 1rem;
+    text-decoration: none;
 }
 
 .all-resources {
@@ -401,6 +411,11 @@ button:hover {
     background-color: rgb(74, 20, 140);
 }
 
+.user-profile-header {
+    width: 100%;
+    text-align: center;
+}
+
 .user-resources {
     display: flex;
     justify-content: space-around;
@@ -498,4 +513,15 @@ button:hover {
     background-color: rgb(255, 145, 145);
     padding: 1%;
     display: none;
+}
+
+.my-resources {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.my-resources .saved-resources, .created-resources {
+    width: 40%;
 }

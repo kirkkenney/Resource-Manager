@@ -6,9 +6,13 @@ const auth = require('../middleware/auth')
 
 const router = new express.Router()
 
+const resourceOptions = ['c', 'c#', 'c++', 'clojure', 'cobol', 'css & design', 'databases', 'general', 'haskell', 'java', 'javascript', 'kotlin', 'pascal', 'php', 'python']
+
 
 router.get('/create-resource', auth, (req, res) => {
-    res.render('create-resource')
+    res.render('create-resource', {
+        resourceOptions: resourceOptions
+    })
 })
 
 router.post('/create-resource', auth, async (req, res) => {
@@ -33,31 +37,14 @@ router.post('/create-resource', auth, async (req, res) => {
     }
 })
 
-router.get('/my-resources', auth, async (req, res) => {
-    // find and return resources where the "owner" field matches the user's id
-    const createdResources = await Resource.find({ owner: req.user._id })
-    // create empty to array to later populated with resources saved by the user
-    let displaySavedResources = []
-    // find all stored resources where the resource._id matches the id stored in user 
-    // savedResources array
-    const foundResources = await Resource.find({ _id: { $in: req.user.savedResources } })
-    // iterate over the found resources, and add them to the empty displaySavedResources
-    // array
-    foundResources.forEach((resource) => {
-        displaySavedResources.push(resource)
-    })
-    res.render('my-resources', {
-        savedResources: displaySavedResources,
-        createdResources: createdResources
-    })
-})
-
 // below route is access via an AJAX post request on the front-end to add resources
 // to the user's savedResources (ie a resource created by another user)
 // this will return a success or error message depending on whether the requested resource
 // is already stored in their savedResources
 router.post('/add-to-my-resources', auth, async (req, res) => {
-    try {
+    if (!req.user) {
+        return res.send({ 'message': 'You need to login to do that' })
+    }
         // first, the ".some" helper iterates over the user's savedResources
         // and ".equals" evaluates whether the current iteration matches resource
         // in the request body. It finishes by returning a boolean
@@ -67,19 +54,19 @@ router.post('/add-to-my-resources', auth, async (req, res) => {
         // if the above returns true, a message is sent back to the AJAX call, informing
         // user that this resource is already in their list
         if (storedResource) {
-            return res.send('Resource already saved')
+            return res.send({ 'message': 'Resource already saved' })
         }
         // if above return false, the requested resource ID is added to the user's
         // savedResources array, and a success message sent back to the AJAX call
         req.user.savedResources.push(req.body.resourceId)
         await req.user.save()
-        return res.send('Resource added to your list')
-    } catch (e) {
-        console.log(e)
-    }
+        return res.send({ 'message': 'Resource added to your list' })
 })
 
 router.post('/add-vote', auth, async (req, res) => {
+    if (!req.user) {
+        return res.send({ 'message': 'You need to login to do that' })
+    }
     // find the resource for id passed to route
     const resource = await Resource.findById(req.body.resourceId)
     // check if the "voters" stored in the resource document match the user
