@@ -11,7 +11,6 @@ const router = new express.Router()
 
 const resourceOptions = ['c', 'c#', 'c++', 'clojure', 'cobol', 'css & design', 'databases', 'general', 'haskell', 'java', 'javascript', 'kotlin', 'pascal', 'php', 'python']
 
-
 // checkLoginStatus is a middleware fnction that checks whether user is currently logged
 // in by checking their cookies against stored tokens. The page they are accessing will
 // render dynamically according to their login status
@@ -87,11 +86,39 @@ router.post('/create-account', checkLoginStatus, async (req, res) => {
 
 router.get('/resources/:resourceGroup', checkLoginStatus, async (req, res) => {
     const resourceGroup = req.params.resourceGroup
-    console.log(resourceGroup)
-    const resources = await Resource.find({ resourceGroup: resourceGroup })
-    console.log(resources)
+    const resources = await Resource.find({ resourceGroup: resourceGroup }).populate('owner').lean()
+    resources.forEach((resource) => {
+        resource.createdAt = resource.createdAt.toDateString()
+    })
+    if (res.locals.isLoggedIn) {
+        // iterate over each resource object in the array
+        resources.forEach((resource) => {
+            // foundResource returns a boolean evaluation of whether the resource._id is 
+            // found in user savedResources._id keys. "toString()" method must be used
+            // because of the way that MongoDB handles the data
+            const savedResource = req.user.savedResources.some(e => e._id.toString() === resource._id.toString())
+            // users that have upvoted a resource have their id stored in the resource's
+            // "voters" db field. Below function checks whether current user's id is 
+            //stored in that field
+            const alreadyVoted = resource.voters.some(e => e._id.toString() === req.user._id.toString())
+            // assign the booleans evaluation to a new "savedResourceCheck" key
+            // in resources objects array
+            resource.savedResourceCheck = savedResource
+            // if the user has saved this resource, add below key/value pair, which
+            // is used in HTML/CSS to dynamically alter the content accordingly
+            if (savedResource) {
+                resource.savedClass = "saved-resource"
+            }
+            // if the user has upvoted this resource, add below key/value pair, which
+            // is used in HTML/CSS to dynamically alter the content accordingly
+            if (alreadyVoted) {
+                resource.votedClass = "voted-resource"
+            }
+        })
+    }
     res.render('main-resources', {
-        resources: resources
+        resources: resources,
+        resourceOptions: resourceOptions
     })
 })
 

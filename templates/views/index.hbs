@@ -22,23 +22,14 @@
                 </div>
 
 
-                <div id="resourcesMainContent">
+                <div class="resources-list">
                     <div class="resource-links">
-                        {{#each resourceOptions}}
-                            <div><a href="/resources/{{ this }}">{{ this }}</a></div>
-                        {{/each}}
-                        {{!-- <div>Javascript</div>
-                        <div>PHP</div>
-                        <div>C</div>
-                        <div>Python</div>
-                        <div>CSS & Web Design</div>
-                        <div>Java</div>
-                        <div>C++</div>
-                        <div>C#</div>
-                        <div>Databases</div>
-                        <div>General</div> --}}
-                    </div>
-
+                        <div class="sticky">
+                            {{#each resourceOptions}}
+                                <div><a href="/resources/{{ this }}">{{ this }}</a></div>
+                            {{/each}}                                
+                        </div>
+                    </div>                        
 
                     <div class="all-resources">
                         {{#each resources}}
@@ -48,7 +39,6 @@
                                         <i class="fas fa-star" onclick="addToFavourites(event, '{{this._id}}');"></i>
                                     </div>
                                     <div class="votes {{ this.votedClass }}">
-                                        {{!-- FONT AWESOME ARROW --}}
                                         <i class="fas fa-arrow-circle-up" onclick="addVote(event, '{{this._id}}');"></i>
                                         <span> {{ this.votes }} </span>
                                     </div>
@@ -82,10 +72,9 @@
                                 </div>
                             </div>
                         {{/each}}
-                    </div>                    
-                </div>
+                    </div> 
+                </div>                   
             </div>
-
 
         </div>
 

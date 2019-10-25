@@ -1,3 +1,13 @@
+window.onload = function() {
+    const winHeight = window.innerHeight
+    const stickyElem = document.querySelector('.sticky')
+    const stickyElemHeight = stickyElem.offsetHeight
+    const offset = winHeight - stickyElemHeight
+    if (offset < 0) {
+        stickyElem.style.top = `${offset-20}px`
+    }
+}
+
 // AJAX CALL TO ADD RESOURCE TO USER FAVOURITES
 function addToFavourites(event, data) {
     const newData = data.toString()

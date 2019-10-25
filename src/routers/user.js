@@ -62,7 +62,8 @@ router.get('/verify/:verificationToken', async (req, res) => {
         // if user record found, and their verificationToken has not expired, set the 
         // auth.token property to an empty string, and verify their account
         user.auth.token = ''
-        user.auth.isVerified = true 
+        user.auth.isVerified = true
+        user.auth.expires = null 
         user.save()
         message = "Verification successful. You can now login."
     }
@@ -126,7 +127,6 @@ router.get('/users/:username', checkLoginStatus, async (req, res) => {
     const user = await User.findOne({ username: req.params.username }).lean()
     // get all resources that have been created by the queried user
     const createdResources = await Resource.find({ owner: user._id }).lean()
-    const savedResources = await Resource.find({ _id: { $in: req.user.savedResources } }).lean()
     // count number of votes given to the queried user's created resources
     // start at 0 by default
     let createdResourceVotes = 0
@@ -134,25 +134,50 @@ router.get('/users/:username', checkLoginStatus, async (req, res) => {
         resource.createdAt = resource.createdAt.toDateString()
         createdResourceVotes += resource.votes
     })
-    savedResources.forEach((resource) => {
-        resource.createdAt = resource.createdAt.toDateString()
-    })
+    // assign user resource stats to new user object properties for display on the 
+    // front-end
+    user.createdResourcesStat = createdResources.length
+    user.createdResourceVotes = createdResourceVotes
+    user.savedResourcesStat = user.savedResources.length
     if (req.user) {
+        createdResources.forEach((resource) => {
+            // foundResource returns a boolean evaluation of whether the resource._id is 
+            // found in user savedResources._id keys. "toString()" method must be used
+            // because of the way that MongoDB handles the data
+            const savedResource = req.user.savedResources.some(e => e._id.toString() === resource._id.toString())
+            // users that have upvoted a resource have their id stored in the resource's
+            // "voters" db field. Below function checks whether current user's id is 
+            //stored in that field
+            const alreadyVoted = resource.voters.some(e => e._id.toString() === req.user._id.toString())
+            // assign the booleans evaluation to a new "savedResourceCheck" key
+            // in resources objects array
+            if (savedResource) {
+                resource.savedClass = "saved-resource"
+            }
+            // if the user has upvoted this resource, add below key/value pair, which
+            // is used in HTML/CSS to dynamically alter the content accordingly
+            if (alreadyVoted) {
+                resource.votedClass = "voted-resource"
+            }
+        })
     // if the user being queried is the user passing the query, render appropriate page
         if (user.username === req.user.username) {
-            user.createdResourcesStat = createdResources.length
-            user.createdResourceVotes = createdResourceVotes
-            user.savedResourcesStat = user.savedResources.length
+            // const savedResources = await Resource.find({ _id: { $in: req.user.savedResources } }).lean()
+            // savedResources.forEach((resource) => {
+            //     resource.createdAt = resource.createdAt.toDateString()
+            // })
             res.render('my-profile', {
                 user: user,
                 createdResources: createdResources,
                 savedResources: savedResources
             })
-        }        
+        } else {
+            res.render('user-profile', {
+                user: user,
+                resources: createdResources
+            })
+        }      
     } else {
-        user.createdResources = createdResources.length
-        user.createdResourceVotes = createdResourceVotes
-        user.savedResources = user.savedResources.length
         res.render('user-profile', {
             user: user,
             resources: createdResources
