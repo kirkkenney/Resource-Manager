@@ -14,15 +14,14 @@
 
             <div class="contentBody">
                 {{!-- PAGE CONTENT GOES HERE --}}
-                <div class="logout-form">
-                    <h2>Logout</h2>
-                    <form action="/logout" method="POST">
-                        <input type="submit" value="Logout Of This Device">
-                    </form>
-                    <form action="/logout-all" method="POST">
-                        <input type="submit" value="Logout Of All Devices">
-                    </form>                    
+                <div class="error-page-body">
+                    <h2>Server error!</h2>
+                    <h4>{{ err }}</h4>
+                    <div class="error-image">
+                        <img src="/images/500.jpg" alt="">
+                    </div>
                 </div>
+
             </div>
 
         </div>

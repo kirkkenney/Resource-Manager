@@ -31,11 +31,8 @@ const auth = async (req, res, next) => {
         }
         next()
     } catch (e) {
-        // console.log(e)
-        // return res.status(401).send({ 'Error': 'You do not have permission to do this' })
-        // res.status(401).send()
-        req.user = false
-        next()
+        res.status(401)
+        res.render('401')
     }
 }
 

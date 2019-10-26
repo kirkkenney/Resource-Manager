@@ -14,15 +14,14 @@
 
             <div class="contentBody">
                 {{!-- PAGE CONTENT GOES HERE --}}
-                <div class="logout-form">
-                    <h2>Logout</h2>
-                    <form action="/logout" method="POST">
-                        <input type="submit" value="Logout Of This Device">
-                    </form>
-                    <form action="/logout-all" method="POST">
-                        <input type="submit" value="Logout Of All Devices">
-                    </form>                    
+                <div class="error-page-body">
+                    <h2>404 Error!</h2>
+                    <h4>Sometimes it's better not to take the road less travelled ... the page you were looking for at {{ url }} does not exist!</h4>
+                    <div class="error-image">
+                        <img src="/images/404.jpg" alt="">
+                    </div>
                 </div>
+
             </div>
 
         </div>

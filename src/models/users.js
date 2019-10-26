@@ -109,8 +109,6 @@ userSchema.methods.generateVerificationToken = async function () {
         // set the auth token to expire in 2 hours
         const expires = Date.now() + 7_200_000
         user.auth.expires = new Date(expires)
-        console.log(user.auth.expires)
-        console.log(user.auth.token)
         // return token to the calling function
         await user.save()
         return token       

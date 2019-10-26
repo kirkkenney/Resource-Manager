@@ -33,85 +33,93 @@
             <div class="my-resources">
                 <div class="created-resources">
                     <h3>Created Resources</h3>
-                    {{#each createdResources}}
-                        <div class="resource-card">
-                            <div class="resource-card-top">
-                                <div class="favourite {{ this.savedClass }}">
-                                    <i class="fas fa-star" onclick="addToFavourites(event, '{{this._id}}');"></i>
+                    {{#if createdResources}}
+                        {{#each createdResources}}
+                            <div class="resource-card">
+                                <div class="resource-card-top">
+                                    <div class="votes {{ this.votedClass }}">
+                                        <i class="fas fa-arrow-circle-up" onclick="addVote(event, '{{this._id}}');"></i>
+                                        <span> {{ this.votes }} </span>
+                                    </div>
+                                    <div class="resource-type">
+                                        <i class="{{ this.resourceTypeIcon }}"></i>
+                                    </div>
                                 </div>
-                                <div class="votes {{ this.votedClass }}">
-                                    <i class="fas fa-arrow-circle-up" onclick="addVote(event, '{{this._id}}');"></i>
-                                    <span> {{ this.votes }} </span>
+                                <div class="resource-card-body">
+                                    <div class="resource-group">
+                                        {{ this.resourceGroup }}
+                                    </div>
+                                    <div class="title">
+                                        {{ this.title }}
+                                    </div>
+                                    <div class="desc">
+                                        {{ this.description }}
+                                    </div>
                                 </div>
-                                <div class="resource-type">
-                                    <i class="{{ this.resourceTypeIcon }}"></i>
+                                <div class="resource-card-bottom">
+                                    <div class="details">
+                                        <div class="submitted-date">
+                                        Submitted: <br>
+                                            {{ this.createdAt }}
+                                        </div>                                        
+                                    </div>
+                                    <div class="link">
+                                        <a href="{{ this.link }}" target="_blank">Visit Resource</a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="resource-card-body">
-                                <div class="resource-group">
-                                    {{ this.resourceGroup }}
-                                </div>
-                                <div class="title">
-                                    {{ this.title }}
-                                </div>
-                                <div class="desc">
-                                    {{ this.description }}
-                                </div>
-                            </div>
-                            <div class="resource-card-bottom">
-                                <div class="details">
-                                    <div class="submitted-date">
-                                    Submitted: <br>
-                                        {{ this.createdAt }}
-                                    </div>                                        
-                                </div>
-                                <div class="link">
-                                    <a href="{{ this.link }}" target="_blank">Visit Resource</a>
-                                </div>
-                            </div>
+                        {{/each}}  
+                    {{else}}
+                        <div>
+                            <h4>There doesn't seem to be anything here ...</h4>
+                            <button class="profile-button"><a href="/create-resource">Add Resources</a></button>
                         </div>
-                    {{/each}}                     
+                    {{/if}}                  
                 </div>
                 <div class="saved-resources">
                     <h3>Saved Resources</h3>
-                    {{#each savedResources}}
-                        <div class="resource-card">
-                            <div class="resource-card-top">
-                                <div class="favourite {{ this.savedClass }}">
-                                    <i class="fas fa-star" onclick="addToFavourites(event, '{{this._id}}');"></i>
+                    {{#if savedResources}}
+                        {{#each savedResources}}
+                            <div class="resource-card">
+                                <div class="resource-card-top">
+                                    <div class="votes {{ this.votedClass }}">
+                                        <i class="fas fa-arrow-circle-up" onclick="addVote(event, '{{this._id}}');"></i>
+                                        <span> {{ this.votes }} </span>
+                                    </div>
+                                    <div class="resource-type">
+                                        <i class="{{ this.resourceTypeIcon }}"></i>
+                                    </div>
                                 </div>
-                                <div class="votes {{ this.votedClass }}">
-                                    <i class="fas fa-arrow-circle-up" onclick="addVote(event, '{{this._id}}');"></i>
-                                    <span> {{ this.votes }} </span>
+                                <div class="resource-card-body">
+                                    <div class="resource-group">
+                                        {{ this.resourceGroup }}
+                                    </div>
+                                    <div class="title">
+                                        {{ this.title }}
+                                    </div>
+                                    <div class="desc">
+                                        {{ this.description }}
+                                    </div>
                                 </div>
-                                <div class="resource-type">
-                                    <i class="{{ this.resourceTypeIcon }}"></i>
+                                <div class="resource-card-bottom">
+                                    <div class="details">
+                                        <div class="submitted-date">
+                                        Submitted: <br>
+                                            {{ this.createdAt }}
+                                        </div>                                        
+                                    </div>
+                                    <div class="link">
+                                        <a href="{{ this.link }}" target="_blank">Visit Resource</a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="resource-card-body">
-                                <div class="resource-group">
-                                    {{ this.resourceGroup }}
-                                </div>
-                                <div class="title">
-                                    {{ this.title }}
-                                </div>
-                                <div class="desc">
-                                    {{ this.description }}
-                                </div>
-                            </div>
-                            <div class="resource-card-bottom">
-                                <div class="details">
-                                    <div class="submitted-date">
-                                    Submitted: <br>
-                                        {{ this.createdAt }}
-                                    </div>                                        
-                                </div>
-                                <div class="link">
-                                    <a href="{{ this.link }}" target="_blank">Visit Resource</a>
-                                </div>
-                            </div>
+                        {{/each}}
+                    {{else}}
+                        <div>
+                            <h4>There doesn't seem to be anything here ...</h4>
+                            <button class="profile-button"><a href="/">Find Resources</a></button>
                         </div>
-                    {{/each}}                    
+                    {{/if}}                    
                 </div>
             </div>
 

@@ -1,11 +1,13 @@
 const express = require('express')
 const nodemailer = require('nodemailer')
+const crypto = require('crypto')
 
 const User = require('../models/users')
 const Resource = require('../models/resources')
 const auth = require('../middleware/auth')
 const checkLoginStatus = require('../middleware/check-login-status.js')
 const welcomeEmail = require('../emails/welcome-email.js')
+const passwordResetEmail = require('../emails/password-reset.js')
 
 
 const router = new express.Router()
@@ -162,10 +164,14 @@ router.get('/users/:username', checkLoginStatus, async (req, res) => {
         })
     // if the user being queried is the user passing the query, render appropriate page
         if (user.username === req.user.username) {
-            // const savedResources = await Resource.find({ _id: { $in: req.user.savedResources } }).lean()
-            // savedResources.forEach((resource) => {
-            //     resource.createdAt = resource.createdAt.toDateString()
-            // })
+            const savedResources = await Resource.find({ _id: { $in: req.user.savedResources } }).lean()
+            savedResources.forEach((resource) => {
+                resource.createdAt = resource.createdAt.toDateString()
+                const alreadyVoted = resource.voters.some(e => e._id.toString() === req.user._id.toString())
+                if (alreadyVoted) {
+                    resource.votedClass = "voted-resource"
+                }
+            })
             res.render('my-profile', {
                 user: user,
                 createdResources: createdResources,
@@ -192,6 +198,94 @@ router.post('/check-username', async (req, res) => {
     } else {
         return res.send({ 'message': 'Username available!' })
     }
+})
+
+router.get('/forgotten-password', async (req, res) => {
+    res.render('forgotten-password', {
+        message: 'Enter the email address that you registered with, and a password reset link will be sent to you.'
+    })
+})
+
+router.post('/forgotten-password', async (req, res) => {
+    const user = await User.findOne({ email: req.body.email })
+    let message
+    if (user) {
+        user.password = crypto.randomBytes(20).toString('hex')
+        const token = await user.generateVerificationToken()
+        passwordResetEmail(user.email, token)
+        await user.save()
+        message = 'A password reset link has been sent to your email address.'
+    } else {
+        message: 'Unable to find that email address. Please check and try again'
+    }
+    res.render('forgotten-password', {
+        message: message
+    })
+})
+
+router.get('/password-reset/:token', async (req, res) => {
+    const user = await User.findOne({ 'auth.token': req.params.token })
+    let userFound = false
+    let token = ''
+    if (user) {
+        userFound = true
+        token = user.auth.token
+    } else {
+        userFound = false
+    }
+    res.render('password-reset', {
+        userFound: userFound,
+        token: token
+    })
+})
+
+router.post('/password-reset/:token', async (req, res) => {
+    const user = await User.findOne({ 'auth.token': req.params.token })
+    let message
+    let userFound = false
+    if (user) {
+        const newPassword = req.body.password
+        user.password = newPassword
+        user.auth.token = ''
+        user.auth.expires = null
+        await user.save()
+        message = 'Your password has successfully been reset. You can now login'    
+    } else {
+        message = 'Unable to verify your account. Please request a new reset link'
+    }
+    res.render('login', {
+        message: message
+    })
+})
+
+router.get('/edit-details', auth, async (req, res) => {
+    res.render('edit-details')
+})
+
+router.post('/edit-details', auth, async (req, res) => {
+    let message = ''
+    if (req.body.email.length > 0) {
+        req.user.tokens = []
+        const token = await req.user.generateVerificationToken()
+        welcomeEmail(req.body.email, token)
+        req.user.email = req.body.email
+        req.user.auth.isVerified = false
+        res.locals.username = null
+        res.locals.isLoggedIn = false
+        await req.user.save()
+        message += "Your registered email address has changed. Please check your emails for your verification link. \n"
+    }
+    if (req.body.password.length > 0) {
+        req.user.password = req.body.password
+        req.user.tokens = []
+        res.locals.username = null 
+        res.locals.isLoggedIn = false
+        await req.user.save()
+        message += "\n Your password has successfully been updated. Please re-login."
+    }
+    res.render('login', {
+        message: message
+    })
 })
 
 

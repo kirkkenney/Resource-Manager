@@ -415,8 +415,27 @@ button:hover {
 }
 
 .user-profile-header {
-    width: 100%;
+    width: 40%;
     text-align: center;
+    margin: 0 30%;
+}
+
+.profile-button {
+    background-color: rgb(74, 20, 140);
+    padding: 1% 2%;
+    box-shadow: rgba(74, 20, 140, .4) 0 2px 6px 0;
+    border: none;
+    border-radius: 5px;
+}
+
+.profile-button:hover {
+    background-color: rgb(121, 158, 209);
+}
+
+.profile-button a {
+    text-decoration: none;
+    color: rgb(255, 245, 235);
+    font-size: 1.1rem;
 }
 
 .user-resources {
@@ -486,6 +505,41 @@ button:hover {
     display: block;
 }
 
+.login-form .forgotten-password a {
+    font-size: .8rem;
+}
+
+.logout-form {
+    text-align: center;
+    width: 100%;
+    margin-top: 5%;
+}
+
+.logout-form h2 {
+    margin-bottom: 5%;
+}
+
+.logout-form form {
+    width: 100%;
+}
+
+.logout-form :last-child {
+    margin-top: -1%;
+}
+
+.logout-form form input[type="submit"] {
+    width: 25%;
+}
+
+.details-form {
+    width: 60%;
+    margin: 10% 20%;
+}
+
+.details-form input[type="email"], input[type="text"] {
+    width: 100%;
+}
+
 .create-account-form {
     width: 70%;
     margin: 0 15%;
@@ -511,6 +565,12 @@ button:hover {
     margin: 2.5% 2%;   
 }
 
+.edit-details-form {
+    width: 60%;
+    margin: 0 20%;
+    text-align: center;
+}
+
 .validation-messages {
     text-align: center;
     margin: 2% 0;
@@ -529,6 +589,10 @@ button:hover {
 
 .my-resources .saved-resources, .created-resources {
     width: 40%;
+}
+
+.my-resources .resource-card .resource-card-top .votes {
+    text-align: left;
 }
 
 .no-resources {
@@ -550,4 +614,33 @@ button:hover {
     color: rgb(238, 233, 230);
     font-size: 1rem;
     text-decoration: none;
+}
+
+.error-page-body {
+    width: 60%;
+    margin: 0 20%;
+    text-align: center
+}
+
+.error-page-body h2 {
+    font-size: 1.4rem;
+}
+
+.error-page-body h4 {
+    font-size: 1.2rem
+}
+
+.error-page-body .error-image {
+    width: 90%;
+    margin: 5%;
+    height: 50vh;
+    text-align: center;
+}
+
+.error-page-body .error-image img {
+    display: block;
+    margin: 0 auto;
+    width: 90%;
+    border-radius: 10px;
+    box-shadow: rgba(74, 20, 140, .6) 0 4px 8px 0;
 }

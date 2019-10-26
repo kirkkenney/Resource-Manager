@@ -48,6 +48,20 @@ app.use(userRouter)
 app.use(resourceRouter)
 app.use(mainRouter)
 
+app.use(function(req, res, next) {
+    res.status(404)
+    res.render('404', {
+        url: req.url
+    })
+})
+
+app.use(function(err, req, res, next) {
+    res.status(500)
+    res.render('500', {
+        err: err
+    })
+})
+
 
 app.listen(port, () => {
     console.log(`Server is up on ${port} \n`)

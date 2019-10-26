@@ -14,15 +14,18 @@
 
             <div class="contentBody">
                 {{!-- PAGE CONTENT GOES HERE --}}
-                <div class="logout-form">
-                    <h2>Logout</h2>
-                    <form action="/logout" method="POST">
-                        <input type="submit" value="Logout Of This Device">
-                    </form>
-                    <form action="/logout-all" method="POST">
-                        <input type="submit" value="Logout Of All Devices">
-                    </form>                    
+                <div class="edit-details-form">
+                    <h2>Edit Details</h2>
+                    <p>If you do not wish to change one of the below, leave it blank.</p>
+                    <p><strong>Changing your email address will require you to re-verify your account.</strong></p>
+                    <h4> {{ message }} </h4>
+                    <form action="/edit-details" method="POST">
+                        <input type="text" name="email" placeholder="Your new email">
+                        <input type="password" name="password" placeholder="Your new password">
+                        <input type="Submit" value="Submit">
+                    </form>                   
                 </div>
+
             </div>
 
         </div>

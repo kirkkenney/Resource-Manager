@@ -123,6 +123,4 @@ router.get('/resources/:resourceGroup', checkLoginStatus, async (req, res) => {
 })
 
 
-
-
 module.exports = router
